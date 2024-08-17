@@ -1,0 +1,13 @@
+<script lang="ts">
+	import type { ColumnType } from "$lib/types";
+	import type { RecordModel } from "pocketbase";
+
+    export let data: RecordModel;
+    export let column: ColumnType;
+</script>
+
+{#each column.Fields as field (field.Field)}
+<div class="ma-table-identry ma-table-data-{field.Field}">
+    {@html data[field.Field]}
+</div>
+{/each}

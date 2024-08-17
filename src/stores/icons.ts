@@ -1,0 +1,17 @@
+export const Icons: { [key: string]: string } = {
+    "id": "ri-key-2-line",
+    "gesichtet": "ri-eye-line",
+    "gesichtet-true": "ri-check-line",
+    "gesichtet-false": "",
+    "erfasst": "ri-checkbox-circle-line",
+    "erfasst-true": "ri-check-line",
+    "erfasst-false": "",
+    "text": "ri-text",
+    "reihe": "ri-organization-chart",
+    "band": "ri-book-2-line",
+    "date": "ri-calendar-line",
+    "person": "ri-group-line",
+    "html": "ri-code-s-slash-line",
+    "number": "ri-hashtag",
+    "files": "ri-image-line",
+}
