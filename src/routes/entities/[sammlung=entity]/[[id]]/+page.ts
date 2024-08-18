@@ -4,15 +4,15 @@ import { error } from '@sveltejs/kit';
 
 const perPage: number = 120;
 
-export async function load({ url, params, fetch }) {
+export async function load({ params }) {
     let schema: SchemaType;
-    if (params.sammlung === "reihen") {
+    if (params.entity === "reihen") {
         schema = reihenSchema;
-    } else if (params.sammlung === "akteure") {
+    } else if (params.entity === "akteure") {
         schema = personenSchema;
-    } else if (params.sammlung === "baende") {
+    } else if (params.entity === "aufnahme") {
         schema = baendeSchema;
-    } else if (params.sammlung === "inhalte") {
+    } else if (params.entity === "inhalte") {
         schema = inhalteSchema;
     } else {
         throw error(404, "Unbekannte Sammlung");

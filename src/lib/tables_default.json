@@ -1,0 +1,770 @@
+[
+	{
+		"Name": "Akteure",
+		"ListRule": "",
+		"ViewRule": "",
+		"CreateRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
+		"DeleteRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
+		"Schema": [
+			{
+				"Name": "Name",
+				"Type": "Text",
+				"Group": "Main",
+				"Required": true,
+				"Presentable": true,
+				"Index": true
+			},
+			{
+				"Name": "Koerperschaft",
+				"Group": "MainSymbol",
+				"Type": "Boolean",
+				"friendlyName": "Körperschaft",
+				"Presentable": true
+			},
+			{
+				"Name": "Lebensdaten",
+				"Group": "Diff",
+				"Type": "Text",
+				"Index": true,
+				"Presentable": true
+			}
+		],
+		"BackRelations": [
+			{
+				"Name": "Aufnahmen",
+				"Type": "BackRelationNM",
+				"Table": "__Aufnahme_Akteure",
+				"Field": "Akteur",
+				"Expand": "Aufnahme",
+				"Group": "Norm",
+				"THidden": true
+			},
+			{
+				"Name": "Werke",
+				"Type": "BackRelationUnlimited",
+				"Table": "Werke",
+				"Field": "Schoepfer",
+				"Group": "Norm",
+				"THidden": true
+			}
+		]
+	},
+	{
+		"Name": "Orte",
+		"ListRule": "",
+		"ViewRule": "",
+		"CreateRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
+		"DeleteRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
+		"Schema": [
+			{
+				"Name": "Name",
+				"Type": "Text",
+				"Group": "Main",
+				"Required": true,
+				"Presentable": true,
+				"Index": true
+			}
+		],
+		"BackRelations": [
+			{
+				"Name": "Aufnahmen",
+				"Type": "BackRelationUnlimited",
+				"Table": "Aufnahme",
+				"Field": "Orte",
+				"Group": "Norm",
+				"THidden": true
+			}
+		]
+	},
+	{
+		"Name": "Reihen",
+		"ListRule": "",
+		"ViewRule": "",
+		"CreateRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
+		"DeleteRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
+		"Schema": [
+			{
+				"Name": "Titel",
+				"Type": "Text",
+				"Group": "Main",
+				"Required": true,
+				"Presentable": true,
+				"Index": true
+			},
+			{
+				"Name": "Erscheinungsfrequenz",
+				"Type": "Text",
+				"Required": false,
+				"Presentable": true
+			}
+		],
+		"BackRelations": [
+			{
+				"Type": "BackRelationNM",
+				"Name": "Aufnahmen",
+				"Table": "__Aufnahme_Reihe",
+				"Field": "Reihe",
+				"Group": "Norm",
+				"THidden": true
+			}
+		]
+	},
+	{
+		"Name": "Sammlungen",
+		"ListRule": "",
+		"ViewRule": "",
+		"CreateRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
+		"DeleteRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
+		"Schema": [
+			{
+				"Name": "Name",
+				"Type": "Text",
+				"Group": "Main",
+				"Required": true,
+				"Presentable": true,
+				"Index": true
+			},
+			{
+				"Name": "Beschreibung",
+				"Group": "Description",
+				"Type": "Editor",
+				"Index": true
+			}
+		],
+		"BackRelations": [
+			{
+				"Name": "Aufnahmen",
+				"Type": "BackRelationUnlimited",
+				"Table": "Aufnahme",
+				"Field": "Sammlungen",
+				"Group": "Tag",
+				"THidden": true
+			}
+		]
+	},
+	{
+		"Name": "Werke",
+		"ListRule": "",
+		"ViewRule": "",
+		"CreateRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
+		"DeleteRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
+		"Schema": [
+			{
+				"Name": "BevTitel",
+				"Type": "Text",
+				"Group": "Main",
+				"friendlyName": "Bevorzugter Titel",
+				"Required": true,
+				"Index": true,
+				"Presentable": true
+			},
+			{
+				"Name": "Schoepfer",
+				"Group": "Diff",
+				"friendlyName": "Geistiger Schöpfer",
+				"Presentable": true,
+				"Required": false,
+				"Type": "RelationUnlimited",
+				"Options": {
+					"Collection": "Akteure"
+				}
+			},
+			{
+				"Name": "Diff",
+				"Group": "Diff",
+				"friendlyName": "Unterscheidende Eigenschaft",
+				"Type": "JsonFixedKeys",
+				"Options": {
+					"MaxSize": 4096000,
+					"Keys": [
+						"Ort",
+						"Entstehungsdatum",
+						"Sonst. unterscheidendes Merkmal"
+					]
+				}
+			}
+		],
+		"BackRelations": [
+			{
+				"Name": "Aufnahmen",
+				"Type": "BackRelationOne",
+				"Table": "Aufnahme",
+				"Field": "Werk"
+			}
+		]
+	},
+	{
+		"Name": "Aufnahme",
+		"ListRule": "",
+		"ViewRule": "",
+		"CreateRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
+		"DeleteRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
+		"Schema": [
+			{
+				"Name": "Werk",
+				"Group": "Main",
+				"Presentable": true,
+				"Required": false,
+				"Type": "RelationOne",
+				"Options": {
+					"Collection": "Werke",
+					"MaxSelect": 1
+				}
+			},
+			{
+				"Name": "UebergeordneteAufnahme",
+				"Group": "IncludedIn",
+				"Type": "RelationOne",
+				"THidden": true,
+				"TVisibility": false,
+				"Options": {
+					"Collection": "Aufnahme",
+					"MaxSelect": 1
+				}
+			},
+			{
+				"Name": "Titel",
+				"Type": "Text",
+				"Required": true,
+				"Group": "Title"
+			},
+			{
+				"Name": "Titelzusatz",
+				"Type": "Text",
+				"Group": "Transcriptions",
+				"TVisibility": false
+			},
+			{
+				"Name": "Datum",
+				"Type": "Text",
+				"Group": "Transcriptions"
+			},
+			{
+				"Name": "Orte",
+				"Presentable": true,
+				"Required": false,
+				"Group": "Norm",
+				"Type": "RelationUnlimited",
+				"Options": {
+					"Collection": "Orte"
+				}
+			},
+			{
+				"Name": "Ausgabebezeichnung",
+				"Type": "Text",
+				"Group": "Transcriptions",
+				"TVisibility": false
+			},
+			{
+				"Name": "Umfang",
+				"Type": "Text",
+				"Group": "MediaSpecific",
+				"TVisibility": false
+			},
+			{
+				"Name": "Masse",
+				"friendlyName": "Maße",
+				"Type": "Text",
+				"Group": "MediaSpecific"
+			},
+			{
+				"Name": "Sprache",
+				"Type": "Select",
+				"Required": true,
+				"Default": "ger",
+				"TVisibility": false,
+				"EVisibility": false,
+				"Group": "MediaSpecific",
+				"Options": {
+					"Values": [
+						"abk",
+						"aar",
+						"afr",
+						"aka",
+						"alb",
+						"amh",
+						"ara",
+						"arg",
+						"arm",
+						"asm",
+						"ava",
+						"ave",
+						"aym",
+						"aze",
+						"bam",
+						"bak",
+						"baq",
+						"bel",
+						"ben",
+						"bis",
+						"bos",
+						"bre",
+						"bul",
+						"bur",
+						"cat",
+						"cha",
+						"che",
+						"nya",
+						"chi",
+						"chu",
+						"chv",
+						"cor",
+						"cos",
+						"cre",
+						"hrv",
+						"cze",
+						"dan",
+						"div",
+						"dut",
+						"dzo",
+						"eng",
+						"epo",
+						"est",
+						"ewe",
+						"fao",
+						"fij",
+						"fin",
+						"fre",
+						"fry",
+						"ful",
+						"gla",
+						"glg",
+						"lug",
+						"geo",
+						"ger",
+						"gre",
+						"kal",
+						"grn",
+						"guj",
+						"hat",
+						"hau",
+						"heb",
+						"her",
+						"hin",
+						"hmo",
+						"hun",
+						"ice",
+						"ido",
+						"ibo",
+						"ind",
+						"ina",
+						"ile",
+						"iku",
+						"ipk",
+						"gle",
+						"ita",
+						"jpn",
+						"jav",
+						"kan",
+						"kau",
+						"kas",
+						"kaz",
+						"khm",
+						"kik",
+						"kin",
+						"kir",
+						"kom",
+						"kon",
+						"kor",
+						"kua",
+						"kur",
+						"lao",
+						"lat",
+						"lav",
+						"lim",
+						"lin",
+						"lit",
+						"lub",
+						"ltz",
+						"mac",
+						"mlg",
+						"may",
+						"mal",
+						"mlt",
+						"glv",
+						"mao",
+						"mar",
+						"mah",
+						"mon",
+						"nau",
+						"nav",
+						"nde",
+						"nbl",
+						"ndo",
+						"nep",
+						"nor",
+						"nob",
+						"nno",
+						"oci",
+						"oji",
+						"ori",
+						"orm",
+						"oss",
+						"pli",
+						"pus",
+						"per",
+						"pol",
+						"por",
+						"pan",
+						"que",
+						"rum",
+						"roh",
+						"run",
+						"rus",
+						"sme",
+						"smo",
+						"sag",
+						"san",
+						"srd",
+						"srp",
+						"sna",
+						"snd",
+						"sin",
+						"slo",
+						"slv",
+						"som",
+						"sot",
+						"spa",
+						"sun",
+						"swa",
+						"ssw",
+						"swe",
+						"tgl",
+						"tah",
+						"tgk",
+						"tam",
+						"tat",
+						"tel",
+						"tha",
+						"tib",
+						"tir",
+						"ton",
+						"tso",
+						"tsn",
+						"tur",
+						"tuk",
+						"twi",
+						"uig",
+						"ukr",
+						"urd",
+						"uzb",
+						"ven",
+						"vie",
+						"vol",
+						"wln",
+						"wel",
+						"wol",
+						"xho",
+						"iii",
+						"yid",
+						"yor",
+						"zha",
+						"zul"
+					],
+					"MaxSelect": 182
+				}
+			},
+			{
+				"Name": "Medientyp",
+				"Type": "Select",
+				"Required": true,
+				"Default": "ohne Hilfsmittel",
+				"Group": "MediaMeta",
+				"TVisibility": false,
+				"EVisibility": false,
+				"Options": {
+					"Values": [
+						"audio",
+						"Mikroform",
+						"Computermedien",
+						"mikroskopisch",
+						"projizierbar",
+						"stereografisch",
+						"ohne Hilfsmittel",
+						"video"
+					],
+					"MaxSelect": 8
+				}
+			},
+			{
+				"Name": "Datentraeger",
+				"friendlyName": "Datenträger",
+				"Type": "Select",
+				"Required": true,
+				"Default": "Band",
+				"Group": "MediaMeta",
+				"TVisibility": false,
+				"EVisibility": false,
+				"Options": {
+					"Values": [
+						"Tonträger",
+						"Audiocartridge",
+						"Phonographenzylinder",
+						"Audiodisk",
+						"Tonspurspule",
+						"Notenrolle",
+						"Audiokassette",
+						"Tonbandspule",
+						"Datenträger",
+						"Speicherkarte",
+						"Computerchip-Cartridge",
+						"Computerdisk",
+						"Computerdisk-Cartridge",
+						"Magnetbandcartridge",
+						"Magnetbandkassette",
+						"Magnetbandspule",
+						"Online-Ressource",
+						"Datenträger für Mikroformen",
+						"Mikrofilmlochkarte",
+						"Mikrofiche",
+						"Mikrofichekassette",
+						"Mikrofilm-Cartridge",
+						"Mikrofilmkassette",
+						"Mikrofilmspule",
+						"Mikrofilmstreifen",
+						"Lichtundurchlässiger Mikrofiche",
+						"Trägermedien für Mikroskop-Anwendungen",
+						"Objektträger",
+						"Datenträger von projizierbaren Bildern",
+						"Filmdose",
+						"Filmkassette",
+						"Filmspule",
+						"Filmstreifen",
+						"Filmstreifen für Einzelbildvorführung",
+						"Filmstreifen-Cartridge",
+						"Overheadfolie",
+						"Dia",
+						"Stereografische Datenträger",
+						"Stereobild",
+						"Stereografische Disk",
+						"Datenträger, die ohne Hilfsmittel zu benutzen sind",
+						"Karte",
+						"Flipchart",
+						"Rolle",
+						"Blatt",
+						"Band",
+						"Video-Datenträger",
+						"Videocartridge",
+						"Videokassette",
+						"Videobandspule",
+						"Mikrofilmrolle",
+						"Gegenstand",
+						"Videodisk",
+						"Filmrolle",
+						"Audio Belt",
+						"Audio wire reel"
+					],
+					"MaxSelect": 56
+				}
+			},
+			{
+				"Name": "Inhaltstyp",
+				"Type": "Select",
+				"Required": true,
+				"Default": "Text",
+				"Group": "MediaMeta",
+				"EVisibility": false,
+				"TVisibility": false,
+				"Options": {
+					"Values": [
+						"kartografisches Daten-Set",
+						"kartografisches Bild",
+						"kartografisches Bewegtbild",
+						"kartografisches taktiles Bild",
+						"kartografische taktile dreidimensionale Form",
+						"kartografische dreidimensionale Form",
+						"Computerdaten",
+						"Computerprogramm",
+						"Bewegungsnotation",
+						"Noten",
+						"aufgeführte Musik",
+						"Geräusche",
+						"gesprochenes Wort",
+						"unbewegtes Bild",
+						"taktiles Bild",
+						"taktile Noten",
+						"taktile Bewegungsnotation",
+						"taktiler Text",
+						"taktile dreidimensionale Form",
+						"Text",
+						"dreidimensionale Form",
+						"dreidimensionales Bewegtbild",
+						"zweidimensionales Bewegtbild",
+						"aufgeführte Bewegung"
+					],
+					"MaxSelect": 24
+				}
+			},
+			{
+				"Name": "Exemplare",
+				"Group": "Exemplare",
+				"TVisibility": false,
+				"Type": "JsonArrayFixedKeys",
+				"Options": {
+					"MaxSize": 4096000,
+					"Keys": [
+						"Besitzer:in",
+						"URL",
+						"Standort",
+						"Signatur",
+						"Zustand"
+					],
+					"View": "all"
+				}
+			},
+			{
+				"Name": "Sammlungen",
+				"Group": "Collections",
+				"Index": true,
+				"Required": false,
+				"Type": "RelationUnlimited",
+				"Options": {
+					"Collection": "Sammlungen"
+				}
+			}
+		],
+		"BackRelations": [
+			{
+				"Name": "Akteure",
+				"Type": "BackRelationNM",
+				"Table": "__Aufnahme_Akteure",
+				"Expand": "Akteur",
+				"Group": "Norm"
+			},
+			{
+				"Name": "Reihen",
+				"Type": "BackRelationNM",
+				"Table": "__Aufnahme_Reihe",
+				"Expand": "Reihe",
+				"Group": "Norm"
+			},
+			{
+				"Name": "Untergeordnete Aufnahme",
+				"Type": "BackRelationOne",
+				"Table": "Aufnahme",
+				"Field": "UebergeordneteAufnahme",
+				"Group": "Includes"
+			}
+		]
+	},
+	{
+		"Name": "__Aufnahme_Reihen",
+		"NoDefaults": true,
+		"ListRule": "",
+		"ViewRule": "",
+		"CreateRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
+		"DeleteRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
+		"Schema": [
+			{
+				"Name": "Aufnahme",
+				"Presentable": true,
+				"Index": true,
+				"Required": true,
+				"Type": "RelationOne",
+				"Options": {
+					"Collection": "Aufnahme",
+					"MaxSelect": 1
+				}
+			},
+			{
+				"Name": "Beziehung",
+				"Type": "Select",
+				"Presentable": true,
+				"Required": true,
+				"Options": {
+					"Values": [
+						"Bevorzugter Reihentitel",
+						"Alternativer Reihentitel",
+						"Späterer Reihentitel",
+						"Früherer Reihentitel",
+						"In anderer Sprache"
+					],
+					"MaxSelect": 1
+				}
+			},
+			{
+				"Name": "Reihe",
+				"Index": true,
+				"Presentable": true,
+				"Required": true,
+				"Type": "RelationOne",
+				"Options": {
+					"Collection": "Reihen",
+					"MaxSelect": 1
+				}
+			},
+			{
+				"Name": "Zaehlung",
+				"friendlyName": "Zählung",
+				"Required": false,
+				"Type": "Text"
+			}
+		]
+	},
+	{
+		"Name": "__Aufnahme_Akteure",
+		"NoDefaults": true,
+		"ListRule": "",
+		"ViewRule": "",
+		"CreateRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
+		"DeleteRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
+		"Schema": [
+			{
+				"Name": "Aufnahme",
+				"Presentable": true,
+				"Required": true,
+				"Index": true,
+				"Type": "RelationOne",
+				"Options": {
+					"Collection": "Aufnahme",
+					"MaxSelect": 1
+				}
+			},
+			{
+				"Name": "Beziehung",
+				"Type": "Select",
+				"Presentable": true,
+				"Required": true,
+				"Options": {
+					"Values": [
+						"Autor:in",
+						"Herausgeber:in",
+						"Verlag",
+						"Druck",
+						"Vertrieb",
+						"Stecher:in",
+						"Zeichner:in",
+						"Übersetzer:in"
+					],
+					"MaxSelect": 1
+				}
+			},
+			{
+				"Name": "Akteur",
+				"Presentable": true,
+				"Required": false,
+				"Index": true,
+				"Type": "RelationOne",
+				"Options": {
+					"Collection": "Akteure",
+					"MaxSelect": 1
+				},
+				"Or": "Angabe"
+			},
+			{
+				"Name": "Erschlossen",
+				"Type": "Boolean"
+			},
+			{
+				"Name": "Unsicher",
+				"Type": "Boolean"
+			},
+			{
+				"Name": "Angabe",
+				"Group": "Transcriptions",
+				"Type": "Text",
+				"Or": "Akteur"
+			}
+		]
+	}
+]

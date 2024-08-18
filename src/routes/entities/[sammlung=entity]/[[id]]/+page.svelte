@@ -169,9 +169,7 @@
 			.collection(schema.TableName)
 			.getList(page, perPage, {
 				sort: ssort,
-				// TODO: filter shows no entry items for the sorted column. either
-				// 1. make the user aware of this and show a message
-				// 2. fetch empty items at the end of the list
+				// TODO: filter shows no entry items for the sorted column. On sorting, we don't show empty columns.
 				filter,
 				expand: fexpand,
 				skipTotal: page !== 1

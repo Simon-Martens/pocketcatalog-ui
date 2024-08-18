@@ -1,0 +1,376 @@
+[
+	{
+		"Name": "Akteure",
+		"Schema": [
+			{
+				"Name": "Beruf",
+				"Type": "Text"
+			},
+			{
+				"Name": "Nachweis",
+				"Type": "Text",
+				"Index": true,
+				"Group": "Research"
+			},
+			{
+				"Name": "Pseudonyme",
+				"Type": "Text",
+				"Index": true
+			},
+			{
+				"Name": "Musenalm_ID",
+				"Type": "Text",
+				"Index": true,
+				"Group": "Deprecated",
+				"TVisibility": false,
+				"EVisibility": false
+			}
+		],
+		"BackRelations": [
+			{
+				"Name": "MA_Inhalte",
+				"Type": "RelationUnlimited",
+				"Table": "Inhalte",
+				"Fields": [
+					"Geschaffen",
+					"Geschrieben",
+					"Gezeichnet",
+					"Gestochen"
+				],
+				"Group": "Norm"
+			}
+		]
+	},
+	{
+		"Name": "Orte",
+		"Schema": [
+			{
+				"Name": "Fiktiv",
+				"Type": "Boolean"
+			},
+			{
+				"Name": "Geonames",
+				"Type": "Text",
+				"Group": "Identifier"
+			},
+			{
+				"Name": "Musenalm_ID",
+				"Type": "Text",
+				"Index": true,
+				"Group": "Deprecated",
+				"TVisibility": false,
+				"EVisibility": false
+			}
+		]
+	},
+	{
+		"Name": "Reihen",
+		"Schema": [
+			{
+				"Name": "Nachweis",
+				"Type": "Text"
+			},
+			{
+				"Name": "Musenalm_ID",
+				"Group": "Deprecated",
+				"Type": "Text",
+				"Index": true,
+				"TVisibility": false,
+				"EVisibility": false
+			}
+		]
+	},
+	{
+		"Name": "Aufnahme",
+		"Schema": [
+			{
+				"Name": "Ortsangabe",
+				"Type": "Text",
+				"Group": "Transcriptions",
+				"Index": true,
+				"TVisibility": false,
+				"Options": {
+					"Transcription": {
+						"For": "Ort"
+					}
+				}
+			},
+			{
+				"Name": "Nachweis",
+				"Type": "Text",
+				"Group": "Research",
+				"Index": true
+			},
+			{
+				"Name": "Verantwortlichkeitsangabe",
+				"Group": "Transcriptions",
+				"Type": "Text",
+				"Index": true,
+				"TVisibility": false,
+				"Options": {
+					"Transcription": {
+						"For": "Akteure"
+					}
+				}
+			},
+			{
+				"Name": "Musenalm_ID",
+				"Type": "Text",
+				"Index": true,
+				"Group": "Deprecated",
+				"Internal": true,
+				"TVisibility": false,
+				"EVisibility": false
+			},
+			{
+				"Name": "Depr",
+				"friendlyName": "Abgekündigte Daten",
+				"Type": "Text",
+				"Group": "Deprecated",
+				"Internal": true,
+				"TVisibility": false,
+				"EVisibility": false
+			},
+			{
+				"Name": "Status",
+				"Type": "Select",
+				"Group": "EditorNotes",
+				"Internal": true,
+				"TVisibility": false,
+				"Options": {
+					"Values": [
+						"Original vorhanden",
+						"Reprint vorhanden",
+						"Fremde Herkunft"
+					],
+					"MaxSelect": 3
+				}
+			}
+		],
+		"BackRelations": [
+			{
+				"Name": "Beiträge",
+				"Type": "BackRelationOne",
+				"Table": "Inhalte",
+				"Field": "Band",
+				"Group": "Norm"
+			}
+		]
+	},
+	{
+		"Name": "Inhalte",
+		"ListRule": "",
+		"ViewRule": "",
+		"CreateRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
+		"DeleteRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
+		"Schema": [
+			{
+				"Name": "Band",
+				"Group": "Main",
+				"Presentable": true,
+				"Required": true,
+				"Type": "RelationOne",
+				"Options": {
+					"Collection": "Aufnahme",
+					"MaxSelect": 1
+				},
+				"Index": true
+			},
+			{
+				"Name": "Objektnummer",
+				"ShortName": "Obj.",
+				"Group": "Diff",
+				"Type": "Text",
+				"Required": true,
+				"Presentable": true,
+				"Index": true
+			},
+			{
+				"Name": "Titel",
+				"Type": "Text",
+				"Group": "Title",
+				"Index": true
+			},
+			{
+				"Name": "Urheberangabe",
+				"Type": "Text",
+				"ShortName": "Urheber",
+				"Index": true,
+				"Group": "Transcriptions"
+			},
+			{
+				"Name": "Incipit",
+				"Type": "Text",
+				"Index": true,
+				"Group": "Transcriptions"
+			},
+			{
+				"Name": "Seite",
+				"Index": true,
+				"Type": "Text",
+				"Group": "Transcriptions"
+			},
+			{
+				"Name": "Paginierung",
+				"ShortName": "Pag.",
+				"Group": "Transcriptions",
+				"Type": "Select",
+				"TVisibility": false,
+				"Options": {
+					"Values": [
+						"Römische Seitenzählung",
+						"Arabische Seitenzählung",
+						"Alphabetische Seitenzählung",
+						"Sonstige Seitenzählung",
+						"1. Arabische Seitenzählung",
+						"2. Arabische Seitenzählung",
+						"3. Arabische Seitenzählung",
+						"4. Arabische Seitenzählung",
+						"5. Arabische Seitenzählung",
+						"6. Arabische Seitenzählung",
+						"7. Arabische Seitenzählung",
+						"8. Arabische Seitenzählung",
+						"1. Römische Seitenzählung",
+						"2. Römische Seitenzählung",
+						"3. Römische Seitenzählung",
+						"4. Römische Seitenzählung",
+						"5. Römische Seitenzählung",
+						"6. Römische Seitenzählung",
+						"7. Römische Seitenzählung",
+						"8. Römische Seitenzählung"
+					],
+					"MaxSelect": 1
+				}
+			},
+			{
+				"Name": "Typ",
+				"Type": "Select",
+				"Group": "Tag",
+				"Options": {
+					"Values": [
+						"Corrigenda",
+						"Diagramm",
+						"Gedicht/Lied",
+						"Graphik",
+						"Graphik-Verzeichnis",
+						"graph. Anleitung",
+						"graph. Strickanleitung",
+						"graph. Tanzanleitung",
+						"Inhaltsverzeichnis",
+						"Kalendarium",
+						"Karte",
+						"Musikbeigabe",
+						"Musikbeigaben-Verzeichnis",
+						"Motto",
+						"Prosa",
+						"Rätsel",
+						"Sammlung",
+						"Spiegel",
+						"szen. Darstellung",
+						"Tabelle",
+						"Tafel",
+						"Titel",
+						"Text",
+						"Trinkspruch",
+						"Umschlag",
+						"Widmung"
+					],
+					"MaxSelect": 26
+				}
+			},
+			{
+				"Name": "Musenalm_ID",
+				"Type": "Text",
+				"Index": true,
+				"Group": "Deprecated",
+				"Internal": true,
+				"TVisibility": false,
+				"EVisibility": false
+			},
+			{
+				"Name": "Scans",
+				"Type": "File",
+				"Options": {
+					"MaxSelect": 1000,
+					"MaxSize": 524288000,
+					"MimeTypes": [
+						"application/pdf",
+						"image/png",
+						"image/vnd.mozilla.apng",
+						"image/jpeg",
+						"image/jp2",
+						"image/jpx",
+						"image/jpm",
+						"image/gif",
+						"image/jxs",
+						"image/jxl",
+						"image/x-xpixmap",
+						"image/vnd.adobe.photoshop",
+						"image/webp",
+						"image/tiff",
+						"image/bmp",
+						"image/x-icon",
+						"image/vnd.djvu",
+						"image/bpg",
+						"image/vnd.dwg",
+						"image/x-icns",
+						"image/heic",
+						"image/heic-sequence",
+						"image/heif",
+						"image/heif-sequence",
+						"image/vnd.radiance",
+						"image/x-xcf",
+						"image/x-gimp-pat",
+						"image/x-gimp-gbr",
+						"image/avif",
+						"image/jxr",
+						"image/svg+xml"
+					],
+					"Thumbs": [
+						"100x0",
+						"250x0",
+						"500x0"
+					],
+					"Protected": false
+				},
+				"Group": "File"
+			},
+			{
+				"Name": "Geschaffen",
+				"Group": "Actors",
+				"Type": "RelationUnlimited",
+				"Options": {
+					"Collection": "Akteure"
+				},
+				"Index": true
+			},
+			{
+				"Name": "Geschrieben",
+				"Group": "Actors",
+				"Type": "RelationUnlimited",
+				"Options": {
+					"Collection": "Akteure"
+				},
+				"Index": true
+			},
+			{
+				"Name": "Gezeichnet",
+				"Group": "Actors",
+				"Type": "RelationUnlimited",
+				"Options": {
+					"Collection": "Akteure"
+				},
+				"Index": true
+			},
+			{
+				"Name": "Gestochen",
+				"Group": "Actors",
+				"Type": "RelationUnlimited",
+				"Options": {
+					"Collection": "Akteure"
+				},
+				"Index": true
+			}
+		]
+	}
+]

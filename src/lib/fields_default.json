@@ -1,0 +1,64 @@
+[
+	{
+		"Name": "Anmerkungen",
+		"Type": "EditorNotes",
+		"Group": "Additional",
+		"THidden": true,
+		"TVisibility": false,
+		"Required": false
+	},
+	{
+		"Name": "Bearbeitungsvermerk",
+		"Group": "EditorNotes",
+		"Type": "Text",
+		"Required": false,
+		"TVisibility": false
+	},
+	{
+		"Name": "Feldanmerkungen",
+		"Group": "System",
+		"TVisibility": false,
+		"THidden": true,
+		"EVisibility": false,
+		"EHidden": true,
+		"Type": "JsonMap",
+		"Required": false,
+		"Options": {
+			"MaxSize": 4096000
+		}
+	},
+	{
+		"Name": "Felder",
+		"Group": "System",
+		"TVisibility": false,
+		"THidden": true,
+		"EVisibility": false,
+		"EHidden": true,
+		"Type": "JsonMap",
+		"Required": false,
+		"Options": {
+			"MaxSize": 4096000
+		}
+	},
+	{
+		"Name": "Bearbeitungsstatus",
+		"Type": "Select",
+		"Group": "System",
+		"THidden": true,
+		"TVisibility": false,
+		"EVisibility": false,
+		"EHidden": true,
+		"Required": true,
+		"Default": "In Bearbeitung",
+		"Options": {
+			"Values": [
+				"Unbekannt",
+				"Gesichtet",
+				"In Bearbeitung",
+				"Rückmeldung",
+				"Erfasst"
+			],
+			"MaxSelect": 1
+		}
+	}
+]
