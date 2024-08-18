@@ -128,9 +128,9 @@ export const personenSchema: SchemaType = {
     DefaultSort: ["Name"],
     Columns: personenColumns,
     MiniColumns: ["Name", "Lebensdaten", "Nachweis"],
-    OptionalBackRelations: [ 
-        { Table: "Inhalte", Fields: [ "Geschaffen", "Geschrieben", "Gezeichnet", "Gestochen" ]},
-        { Table: "Baende", Fields: [ "Herausgabe", "Verlag", "Druck", "Vertrieb" ]},
+    OptionalBackRelations: [
+        { Table: "Inhalte", Fields: ["Geschaffen", "Geschrieben", "Gezeichnet", "Gestochen"] },
+        { Table: "Baende", Fields: ["Herausgabe", "Verlag", "Druck", "Vertrieb"] },
     ],
 }
 
@@ -348,7 +348,7 @@ export const inhalteSchema: SchemaType = {
     DefaultSort: ["Band.Kurztitel", "Objektnummer"],
     Columns: inhalteColumns,
     DefaultExpand: ["Band", "Geschaffen", "Geschrieben", "Gezeichnet", "Gestochen"],
-    MiniColumns: [ "Band", "Nummer", "Seite", "Typ", "Scans" ],
+    MiniColumns: ["Band", "Nummer", "Seite", "Typ", "Scans"],
 }
 
 export const baendeColumns: ColumnType[] = [
@@ -721,12 +721,11 @@ export const baendeColumns: ColumnType[] = [
 
 export const baendeSchema: SchemaType = {
     Name: "Bände",
-    TableName: "Baende",
-    DefaultSort: ["Bevorzugter_Reihentitel.Titel", "Jahr"],
+    TableName: "Aufnahme",
+    DefaultSort: ["created"],
     Columns: baendeColumns,
-    DefaultExpand: ["Bevorzugter_Reihentitel", "Alternativer_Reihentitel", "Franzoesischer_Reihentitel", "Deutscher_Reihentitel", "Alternatives_Titelblatt", "TA_von", "hat_TA", "Herausgabe", "Verlag", "Druck", "Vertrieb"],
     MiniColumns: ["Gesichtet", "Vollständig erfasst", "Bev. Reihentitel", "Jahr", "Ausgabe", "Biblio ID"],
-    RequiredBackRelations: [ { Table: "Inhalte", Fields: [ "Band" ]} ],
+    RequiredBackRelations: [{ Table: "Inhalte", Fields: ["Band"] }],
 }
 
 export const reihenColumns: ColumnType[] = [
@@ -812,6 +811,6 @@ export const reihenSchema: SchemaType = {
     DefaultSort: ["Titel"],
     Columns: reihenColumns,
     MiniColumns: ["Titel", "Nachweis", "Anmerkungen"],
-    OptionalBackRelations: [ { Table: "Baende", Fields:  [ "Alternativer_Reihentitel", "Franzoesischer_Reihentitel", "Deutscher_Reihentitel", "Alternatives_Titelblatt", "TA_von", "hat_TA" ]} ],
-    RequiredBackRelations: [ { Table: "Baende", Fields: [ "Bevorzugter_Reihentitel" ]} ],
+    OptionalBackRelations: [{ Table: "Baende", Fields: ["Alternativer_Reihentitel", "Franzoesischer_Reihentitel", "Deutscher_Reihentitel", "Alternatives_Titelblatt", "TA_von", "hat_TA"] }],
+    RequiredBackRelations: [{ Table: "Baende", Fields: ["Bevorzugter_Reihentitel"] }],
 }
