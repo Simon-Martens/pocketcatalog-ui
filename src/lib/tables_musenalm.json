@@ -29,14 +29,16 @@
 		"BackRelations": [
 			{
 				"Name": "MA_Inhalte",
-				"Type": "RelationUnlimited",
-				"Table": "Inhalte",
-				"Fields": [
-					"Geschaffen",
-					"Geschrieben",
-					"Gezeichnet",
-					"Gestochen"
-				],
+				"Type": "BackRelationUnlimited",
+				"Options": {
+					"Table": "Inhalte",
+					"Field": [
+						"Geschaffen",
+						"Geschrieben",
+						"Gezeichnet",
+						"Gestochen"
+					]
+				},
 				"Group": "Norm"
 			}
 		]
@@ -133,7 +135,7 @@
 			},
 			{
 				"Name": "Status",
-				"Type": "Select",
+				"Type": "SelectUnlimited",
 				"Group": "EditorNotes",
 				"Internal": true,
 				"TVisibility": false,
@@ -151,8 +153,12 @@
 			{
 				"Name": "Beiträge",
 				"Type": "BackRelationOne",
-				"Table": "Inhalte",
-				"Field": "Band",
+				"Options": {
+					"Table": "Inhalte",
+					"Field": [
+						"Band"
+					]
+				},
 				"Group": "Norm"
 			}
 		]
@@ -214,7 +220,7 @@
 				"Name": "Paginierung",
 				"ShortName": "Pag.",
 				"Group": "Transcriptions",
-				"Type": "Select",
+				"Type": "SelectOne",
 				"TVisibility": false,
 				"Options": {
 					"Values": [
@@ -244,7 +250,7 @@
 			},
 			{
 				"Name": "Typ",
-				"Type": "Select",
+				"Type": "SelectUnlimited",
 				"Group": "Tag",
 				"Options": {
 					"Values": [

@@ -1,33 +1,23 @@
 import type { RecordModel } from 'pocketbase';
 
-export type Group = "EditorNotes" | "System" | "Main" | "Diff" | "MainSymbol" | "Norm" | "Description" | "IncludedIn" | "Includes" | "Transcriptions" | "MediaSpecific" | "MediaMeta" | "Exemplare" | "Collections" | "Research" | "Deprecated" | "Identifier" | "Title" | "Tag" | "File" | "Actors" | "Additional" | "";
+export type Group = "EditorNotes" | "System" | "Main" | "Diff" | "MainSymbol" | "Norm" | "Description" | "IncludedIn" | "Includes" | "Transcriptions" | "MediaSpecific" | "MediaMeta" | "Exemplare" | "Collections" | "Research" | "Deprecated" | "Identifier" | "Title" | "Tag" | "File" | "Actors" | "Additional" | "" | "BackRelationUnlimited" | "BackRelationNM" | "BackRelationOne";
 
-export type Type = "Text" | "Editor" | "Select" | "Json" | "Boolean" | "JsonArrayFixedKeys" | "RelationUnlimited" | "JsonFixedKeys" | "JsonMap" | "RelationOne";
 
-export type RType = "BackRelationUnlimited" | "BackRelationNM" | "BackRelationOne";
+export type Type = "Text" | "Editor" | "SelectOne" | "SelectUnlimited" | "Json" | "Boolean" | "JsonArrayFixedKeys" | "RelationUnlimited" | "JsonFixedKeys" | "JsonMap" | "RelationOne";
 
 export type Bearbeitungsstatus = "Unbekannt" | "Gesichtet" | "In Bearbeitung" | "Rückmeldung" | "Erfasst" | "";
 
 export interface Table {
     Name: string;
     Schema: Schema[];
-    BackRelations?: BackRelation[];
+    BackRelations?: Schema[];
     ListRule?: string;
     ViewRule?: string;
     CreateRule?: string;
     DeleteRule?: string;
     NoDefaults?: boolean;
 }
-export interface BackRelation {
-    Name: string;
-    type: RType;
-    Table: string;
-    Fields?: string[];
-    Group?: string;
-    Field?: string;
-    Expand?: string;
-    THidden?: boolean;
-}
+
 export interface Schema {
     Name: string;
     Type: string;
@@ -57,6 +47,9 @@ export interface Options {
     Protected?: boolean;
     Keys?: string[];
     View?: string;
+    Table: string;
+    Field?: string[];
+    Expand?: string;
 }
 export interface Transcription {
     For: string;

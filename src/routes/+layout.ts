@@ -60,6 +60,10 @@ function MergeCollection(col1: Table[], col2: Table[]) {
             }
 
             val.Schema = MergeFields(val.Schema, t.Schema);
+            if (val.BackRelations)
+                val.Schema = MergeFields(val.Schema, val.BackRelations);
+            if (t.BackRelations)
+                val.Schema = MergeFields(val.Schema, t.BackRelations);
             map[t.Name] = val;
         }
     }

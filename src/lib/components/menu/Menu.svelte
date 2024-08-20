@@ -1,54 +1,65 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import Alert from '$lib/components/Alert.svelte';
 	import { loggedIn } from '$stores/pocketbase';
 	import { fly } from 'svelte/transition';
 	import { sineInOut } from 'svelte/easing';
 </script>
 
-<div
-	class="flex flex-col gap-x-2 max-h-screen sticky top-0 border-r px-4 py-4 border-slate-300"
-	class:border-r={$loggedIn}>
-	<div class="w-12 h-12 border border-slate-500 mb-8"></div>
+<div class="flex flex-row gap-y-2 w-full sticky top-0 border-b px-8 border-slate-300" class:border-r={$loggedIn}>
+	<div class="w-12 h-12 border border-slate-500 mr-4"></div>
 	{#if $loggedIn}
 		<nav
-			class="flex flex-col gap-y-3 grow"
+			class="flex flex-row gap-x-3 grow"
 			in:fly|global={{ x: -30, duration: 450, easing: sineInOut }}
 			out:fly|global={{ x: -30, duration: 450, easing: sineInOut }}>
-			<a href="/entities/reihen" aria-current={$page.url.pathname.toLowerCase().startsWith('/entities/reihen')}>
-				<i class="ri-organization-chart" />
+			<a href="/aufnahme" aria-current={$page.url.pathname.toLowerCase().startsWith('/entities/Aufnahme')}>
+				<i class="ri-book-2-line"></i> <span class="name">Aufnahme</span>
 			</a>
-			<a href="/entities/aufnahme" aria-current={$page.url.pathname.toLowerCase().startsWith('/entities/aufnahme')}>
-				<i class="ri-book-2-line"></i>
+			<a href="/entities/Inhalte" aria-current={$page.url.pathname.toLowerCase().startsWith('/entities/Inhalte')}>
+				<i class="ri-article-line"></i> <span class="name">Inhalte</span>
 			</a>
-			<a href="/entities/inhalte" aria-current={$page.url.pathname.toLowerCase().startsWith('/entities/inhalte')}>
-				<i class="ri-article-line"></i>
+			<div class="grow"></div>
+			<a href="/entities/Reihen" aria-current={$page.url.pathname.toLowerCase().startsWith('/entities/Reihen')}>
+				<i class="ri-organization-chart" /> <span class="name">Reihen</span>
 			</a>
-			<a href="/entities/akteure" aria-current={$page.url.pathname.toLowerCase().startsWith('/entities/akteure')}>
-				<i class="ri-group-line" />
+			<a href="/entities/Akteure" aria-current={$page.url.pathname.toLowerCase().startsWith('/entities/Akteure')}>
+				<i class="ri-group-line" /> <span class="name">Akteure</span>
+			</a>
+			<a href="/entities/Orte" aria-current={$page.url.pathname.toLowerCase().startsWith('/entities/Orte')}>
+				<i class="ri-map-pin-line"></i> <span class="name">Orte</span>
 			</a>
 		</nav>
 	{:else}
 		<div class="grow"></div>
 	{/if}
-
-	<Alert />
 </div>
 
 <style>
 	nav a {
-		@apply text-center w-full text-2xl;
+		@apply text-center text-2xl pb-2 pt-3;
 	}
 
 	nav a:hover {
 		@apply text-zinc-900 border-zinc-400;
 	}
 
+	nav a i {
+		@apply mr-1;
+	}
+
 	nav a {
-		@apply p-1.5 text-zinc-600 hover:text-zinc-900 rounded-lg box-border border-2 border-transparent transition-all duration-100;
+		@apply px-2 pt-2 text-zinc-600 hover:text-zinc-900 box-border border-b-2 border-transparent transition-all duration-100;
+	}
+
+	nav a .name {
+		@apply hidden;
 	}
 
 	nav a[aria-current='true'] {
-		@apply border-2 shadow border-zinc-800 text-zinc-900 pointer-events-none;
+		@apply border-b-2 shadow border-zinc-800 text-zinc-900 pointer-events-none;
+	}
+
+	nav a[aria-current='true'] .name {
+		@apply !inline-block;
 	}
 </style>

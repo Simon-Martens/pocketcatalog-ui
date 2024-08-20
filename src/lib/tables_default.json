@@ -1,6 +1,7 @@
 [
 	{
 		"Name": "Akteure",
+		"friendlyName": "Personen & Körperschaften",
 		"ListRule": "",
 		"ViewRule": "",
 		"CreateRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
@@ -33,17 +34,25 @@
 			{
 				"Name": "Aufnahmen",
 				"Type": "BackRelationNM",
-				"Table": "__Aufnahme_Akteure",
-				"Field": "Akteur",
-				"Expand": "Aufnahme",
+				"Options": {
+					"Table": "__Aufnahme_Akteure",
+					"Field": [
+						"Akteur"
+					],
+					"Expand": "Aufnahme"
+				},
 				"Group": "Norm",
 				"THidden": true
 			},
 			{
 				"Name": "Werke",
 				"Type": "BackRelationUnlimited",
-				"Table": "Werke",
-				"Field": "Schoepfer",
+				"Options": {
+					"Table": "Werke",
+					"Field": [
+						"Schoepfer"
+					]
+				},
 				"Group": "Norm",
 				"THidden": true
 			}
@@ -69,8 +78,12 @@
 			{
 				"Name": "Aufnahmen",
 				"Type": "BackRelationUnlimited",
-				"Table": "Aufnahme",
-				"Field": "Orte",
+				"Options": {
+					"Table": "Aufnahme",
+					"Field": [
+						"Orte"
+					]
+				},
 				"Group": "Norm",
 				"THidden": true
 			}
@@ -102,8 +115,12 @@
 			{
 				"Type": "BackRelationNM",
 				"Name": "Aufnahmen",
-				"Table": "__Aufnahme_Reihe",
-				"Field": "Reihe",
+				"Options": {
+					"Table": "__Aufnahme_Reihe",
+					"Field": [
+						"Reihe"
+					]
+				},
 				"Group": "Norm",
 				"THidden": true
 			}
@@ -135,8 +152,12 @@
 			{
 				"Name": "Aufnahmen",
 				"Type": "BackRelationUnlimited",
-				"Table": "Aufnahme",
-				"Field": "Sammlungen",
+				"Options": {
+					"Table": "Aufnahme",
+					"Field": [
+						"Sammlungen"
+					]
+				},
 				"Group": "Tag",
 				"THidden": true
 			}
@@ -188,8 +209,12 @@
 			{
 				"Name": "Aufnahmen",
 				"Type": "BackRelationOne",
-				"Table": "Aufnahme",
-				"Field": "Werk"
+				"Options": {
+					"Table": "Aufnahme",
+					"Field": [
+						"Werk"
+					]
+				}
 			}
 		]
 	},
@@ -269,7 +294,7 @@
 			},
 			{
 				"Name": "Sprache",
-				"Type": "Select",
+				"Type": "SelectUnlimited",
 				"Required": true,
 				"Default": "ger",
 				"TVisibility": false,
@@ -466,7 +491,7 @@
 			},
 			{
 				"Name": "Medientyp",
-				"Type": "Select",
+				"Type": "SelectUnlimited",
 				"Required": true,
 				"Default": "ohne Hilfsmittel",
 				"Group": "MediaMeta",
@@ -489,7 +514,7 @@
 			{
 				"Name": "Datentraeger",
 				"friendlyName": "Datenträger",
-				"Type": "Select",
+				"Type": "SelectUnlimited",
 				"Required": true,
 				"Default": "Band",
 				"Group": "MediaMeta",
@@ -559,7 +584,7 @@
 			},
 			{
 				"Name": "Inhaltstyp",
-				"Type": "Select",
+				"Type": "SelectUnlimited",
 				"Required": true,
 				"Default": "Text",
 				"Group": "MediaMeta",
@@ -607,7 +632,8 @@
 						"URL",
 						"Standort",
 						"Signatur",
-						"Zustand"
+						"Zustand",
+						"Anmerkung"
 					],
 					"View": "all"
 				}
@@ -627,22 +653,36 @@
 			{
 				"Name": "Akteure",
 				"Type": "BackRelationNM",
-				"Table": "__Aufnahme_Akteure",
-				"Expand": "Akteur",
+				"Options": {
+					"Table": "__Aufnahme_Akteure",
+					"Field": [
+						"Aufnahme"
+					],
+					"Expand": "Akteur"
+				},
 				"Group": "Norm"
 			},
 			{
 				"Name": "Reihen",
 				"Type": "BackRelationNM",
-				"Table": "__Aufnahme_Reihe",
-				"Expand": "Reihe",
+				"Options": {
+					"Table": "__Aufnahme_Reihe",
+					"Field": [
+						"Aufnahme"
+					],
+					"Expand": "Reihe"
+				},
 				"Group": "Norm"
 			},
 			{
 				"Name": "Untergeordnete Aufnahme",
 				"Type": "BackRelationOne",
-				"Table": "Aufnahme",
-				"Field": "UebergeordneteAufnahme",
+				"Options": {
+					"Table": "Aufnahme",
+					"Field": [
+						"UebergeordneteAufnahme"
+					]
+				},
 				"Group": "Includes"
 			}
 		]
@@ -668,7 +708,7 @@
 			},
 			{
 				"Name": "Beziehung",
-				"Type": "Select",
+				"Type": "SelectOne",
 				"Presentable": true,
 				"Required": true,
 				"Options": {
@@ -722,7 +762,7 @@
 			},
 			{
 				"Name": "Beziehung",
-				"Type": "Select",
+				"Type": "SelectOne",
 				"Presentable": true,
 				"Required": true,
 				"Options": {
