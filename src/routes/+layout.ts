@@ -3,13 +3,14 @@ import { redirect } from '@sveltejs/kit';
 import fields_def from '$lib/fields_default.json';
 import tables_def from '$lib/tables_default.json';
 import tables_mus from '$lib/tables_musenalm.json';
-import type { Schema, Table } from '$lib/newtypes';
+import type { FieldList, Schema, Table } from '$lib/newtypes';
+import type { LayoutLoad } from './$types';
 
 // This is also needed bc local storage is not available server side 
 // and gets deleted on reload otherwise
 export const ssr = false;
 
-export function load({ url, fetch }) {
+export const load: LayoutLoad = function({ url }) {
     if (url.pathname === "/login") return;
 
     if (!api.authStore.isValid || !api.authStore.model) {
@@ -36,6 +37,20 @@ function GetMergeTypes() {
         if (!value.NoDefaults) {
             value.Schema = MergeFields(value.Schema, fields_def as Schema[])
         }
+
+        let l: FieldList = {};
+        // WARNING: We do not use copies of the Schema objects, but the objects themselves here. Change if mutated!
+        for (const f of value.Schema) {
+            let g = f.Group;
+            if (!g) g = "None";
+            if (Object.hasOwn(l, g)) {
+                l[g]!.push(f);
+            } else {
+                l[g] = [f];
+            }
+        }
+
+        value.Fields = l;
     }
 
     return c;
@@ -60,10 +75,11 @@ function MergeCollection(col1: Table[], col2: Table[]) {
             }
 
             val.Schema = MergeFields(val.Schema, t.Schema);
-            if (val.BackRelations)
-                val.Schema = MergeFields(val.Schema, val.BackRelations);
             if (t.BackRelations)
-                val.Schema = MergeFields(val.Schema, t.BackRelations);
+                if (val.BackRelations)
+                    val.BackRelations = MergeFields(val.BackRelations, t.BackRelations);
+                else
+                    val.BackRelations = t.BackRelations;
             map[t.Name] = val;
         }
     }

@@ -1,7 +1,7 @@
 [
 	{
 		"Name": "Anmerkungen",
-		"Type": "EditorNotes",
+		"Type": "Editor",
 		"Group": "Additional",
 		"THidden": true,
 		"TVisibility": false,
@@ -10,7 +10,7 @@
 	{
 		"Name": "Bearbeitungsvermerk",
 		"Group": "EditorNotes",
-		"Type": "Text",
+		"Type": "Editor",
 		"Required": false,
 		"TVisibility": false
 	},

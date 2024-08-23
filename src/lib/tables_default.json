@@ -41,7 +41,7 @@
 					],
 					"Expand": "Aufnahme"
 				},
-				"Group": "Norm",
+				"Group": "List",
 				"THidden": true
 			},
 			{
@@ -53,7 +53,7 @@
 						"Schoepfer"
 					]
 				},
-				"Group": "Norm",
+				"Group": "List",
 				"THidden": true
 			}
 		]
@@ -84,7 +84,7 @@
 						"Orte"
 					]
 				},
-				"Group": "Norm",
+				"Group": "List",
 				"THidden": true
 			}
 		]
@@ -636,6 +636,14 @@
 						"Anmerkung"
 					],
 					"View": "all"
+				}
+			},
+			{
+				"Name": "Erschlossen",
+				"Group": "System",
+				"Type": "JsonArrayFields",
+				"Options": {
+					"MaxSize": 4096000
 				}
 			},
 			{

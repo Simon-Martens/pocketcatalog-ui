@@ -12,20 +12,20 @@
 			class="flex flex-row gap-x-3 grow"
 			in:fly|global={{ x: -30, duration: 450, easing: sineInOut }}
 			out:fly|global={{ x: -30, duration: 450, easing: sineInOut }}>
-			<a href="/aufnahme" aria-current={$page.url.pathname.toLowerCase().startsWith('/entities/Aufnahme')}>
+			<a href="/Aufnahme" aria-current={$page.url.pathname.toLowerCase().startsWith('/aufnahme')}>
 				<i class="ri-book-2-line"></i> <span class="name">Aufnahme</span>
 			</a>
-			<a href="/entities/Inhalte" aria-current={$page.url.pathname.toLowerCase().startsWith('/entities/Inhalte')}>
+			<a href="/entities/Inhalte" aria-current={$page.url.pathname.toLowerCase().startsWith('/entities/inhalte')}>
 				<i class="ri-article-line"></i> <span class="name">Inhalte</span>
 			</a>
 			<div class="grow"></div>
-			<a href="/entities/Reihen" aria-current={$page.url.pathname.toLowerCase().startsWith('/entities/Reihen')}>
-				<i class="ri-organization-chart" /> <span class="name">Reihen</span>
+			<a href="/entities/Reihen" aria-current={$page.url.pathname.toLowerCase().startsWith('/entities/reihen')}>
+				<i class="ri-organization-chart"></i> <span class="name">Reihen</span>
 			</a>
-			<a href="/entities/Akteure" aria-current={$page.url.pathname.toLowerCase().startsWith('/entities/Akteure')}>
-				<i class="ri-group-line" /> <span class="name">Akteure</span>
+			<a href="/entities/Akteure" aria-current={$page.url.pathname.toLowerCase().startsWith('/entities/akteure')}>
+				<i class="ri-group-line"></i> <span class="name">Akteure</span>
 			</a>
-			<a href="/entities/Orte" aria-current={$page.url.pathname.toLowerCase().startsWith('/entities/Orte')}>
+			<a href="/entities/Orte" aria-current={$page.url.pathname.toLowerCase().startsWith('/entities/orte')}>
 				<i class="ri-map-pin-line"></i> <span class="name">Orte</span>
 			</a>
 		</nav>
