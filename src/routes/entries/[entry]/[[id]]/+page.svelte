@@ -1,71 +1,26 @@
 <script lang="ts">
 	import EntryTable from '$lib/components/list/EntryTable.svelte';
-	import TableFoot from '$lib/components/list/TableFoot.svelte';
 	import { RecordsList } from '$stores/records.svelte';
-	import * as Tooltip from '$lib/shacdn/components/ui/tooltip';
-
-	const { data } = $props();
+	import EntryMenu from '$lib/components/list/EntryMenu.svelte';
+	import type { Table } from '$lib/newtypes.js';
 
 	// scheme must be derived; otherwise it does not change on data change.
-	let table: EntryTable;
+	const { data } = $props();
 
 	// this data is initialized and bound in the data table
 	let selectable: boolean = $state(false);
-	let visiblefields: string[] = $state([]);
 
-	let records = $derived.by(() => {
-		return new RecordsList(data.scheme, data.perPage);
-	});
-
-	let filtered = false;
-	let selectcount = 0;
-
-	$effect(() => {
-		records.Fetch();
-	});
+	// this is not reactive, and doesn't react to changes in the scheme
+	// if we derive this from scheme; but also we can't change state from
+	// the derived value. It's fucked.
+	let records: RecordsList = $derived(data.records);
+	let scheme: Table = $derived(data.scheme);
 </script>
 
-<div class="px-8 py-2 border-b bg-slate-50 flex flex-row sticky top-0">
-	<h2 class="text-slate-400 py-0.5">
-		<span class="">Sammlungen&nbsp;&middot;&nbsp;</span><span class="text-slate-900 font-bold">{data.scheme.Name}</span>
-	</h2>
-	<Tooltip.Root>
-		<Tooltip.Trigger>
-			<button type="button" aria-label="Refresh" class="ml-2 w-6 h-6 my-0.5 rounded-full hover:bg-slate-300 justify-center items-center text-center" onclick={() => records.Refresh()} class:refreshing={records.Refreshing}>
-				<i class="ri-refresh-line"></i>
-			</button>
-		</Tooltip.Trigger>
-		<Tooltip.Content side="bottom">
-			<p class="text-base">Neu laden</p>
-		</Tooltip.Content>
-	</Tooltip.Root>
+<EntryMenu {records} {scheme} perPage={data.perPage} />
 
-	<div class="grow"></div>
-	<div class="">
-		{#if records.Loading || records.Refreshing || !records.List}
-			<i class="ri-hourglass-2-fill inline-block align-middle !text-base"></i>
-		{:else}
-			<TableFoot
-				total={records.TotalItems}
-				totalPages={records.TotalPages}
-				perPage={data.perPage}
-				page={records.Page}
-				{filtered}
-				selected={selectcount}
-				on:resetfilter={() => {}}
-				on:resetselect={() => {}}
-				on:deleteselected={() => {}}
-				on:npage={() => records.Next()} />
-		{/if}
-	</div>
-</div>
-
-{#each records.Visible as v (v.Name)}
-	<div>{v.Name}</div>
-{/each}
-
-<div class="">
-	<EntryTable bind:this={table} scheme={data.scheme} {records} bind:selectable bind:visiblefields />
+<div class="px-4">
+	<EntryTable {scheme} {records} bind:selectable />
 </div>
 
 <style>

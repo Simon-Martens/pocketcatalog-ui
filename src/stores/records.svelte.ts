@@ -1,4 +1,4 @@
-import type { FieldList, Schema, Table } from "$lib/newtypes";
+import type { Schema, Table } from "$lib/newtypes";
 import { type RecordModel } from "pocketbase";
 
 import { api } from "./pocketbase";
@@ -13,11 +13,14 @@ export class RecordsList {
 
     Page = $state(1);
     Sort = $state<string[]>([]);
+    Filter: string = $state("");
 
     Visible = $state<Schema[]>([]);
 
-    Filter: string = '';
+    Selectable = $state<boolean>(false);
+    Selected = $state<RecordModel[]>([]);
 
+    #expand: string;
     #scheme: Table;
     #perpage: number;
     #permanentFilter: string = "";
@@ -25,6 +28,7 @@ export class RecordsList {
     constructor(scheme: Table, perPage: number = 120, listFilter: boolean = true) {
         this.#scheme = scheme;
         this.#perpage = perPage;
+        this.#expand = this.#Expand();
 
         this.DefaultSort();
         this.DefaultFilter();
@@ -33,6 +37,7 @@ export class RecordsList {
         if (scheme.ListFilter && listFilter) {
             this.#permanentFilter = scheme.ListFilter
         }
+
     }
 
     DefaultSort() {
@@ -63,17 +68,38 @@ export class RecordsList {
     DefaultVisible() {
         this.Visible = [];
         if (!this.#scheme.Fields) return;
-        for (const f of this.Showables(this.#scheme.Fields)) {
-            this.Visible.push(f);
+        for (const f of this.Showables()) {
+            if (!Object.hasOwn(f, "TVisibility") || f.TVisibility)
+                this.Visible.push(f);
         }
     }
 
-    * Showables(list: FieldList) {
+    // System & Some other Fields are not yielded here
+    * Showables() {
+        const list = this.#scheme.Fields;
+        if (!list) return;
         yield* this.#ShowablesArray(list.MainSymbol);
         yield* this.#ShowablesArray(list.Main);
         yield* this.#ShowablesArray(list.Diff);
         yield* this.#ShowablesArray(list.Title);
+        yield* this.#ShowablesArray(list.Description);
         yield* this.#ShowablesArray(list.Transcriptions);
+        yield* this.#ShowablesArray(list.Norm);
+        yield* this.#ShowablesArray(list.Actors);
+        yield* this.#ShowablesArray(list.None);
+        yield* this.#ShowablesArray(list.MediaSpecific);
+        yield* this.#ShowablesArray(list.Research);
+        yield* this.#ShowablesArray(list.Tag);
+        yield* this.#ShowablesArray(list.Collections);
+        yield* this.#ShowablesArray(list.MediaMeta);
+        yield* this.#ShowablesArray(list.Identifier);
+        yield* this.#ShowablesArray(list.Exemplare);
+        yield* this.#ShowablesArray(list.File);
+        yield* this.#ShowablesArray(list.Includes);
+        yield* this.#ShowablesArray(list.IncludedIn);
+        yield* this.#ShowablesArray(list.Additional);
+        yield* this.#ShowablesArray(list.EditorNotes);
+        yield* this.#ShowablesArray(list.Deprecated);
     }
 
     * #ShowablesArray(schemata: Schema[] | undefined | null) {
@@ -84,6 +110,77 @@ export class RecordsList {
         }
     }
 
+    Toggle(name: string) {
+        let i = 0;
+        for (const f of this.Showables()) {
+            if (i < this.Visible.length && name === this.Visible[i].Name) {
+                // Field already is shown, we hide
+                this.Visible.splice(i, 1);
+                break;
+            } else if (i < this.Visible.length && f.Name === this.Visible[i].Name) {
+                i++;
+            } else if (f.Name === name) {
+                this.Visible.splice(i, 0, f);
+                break;
+            }
+        }
+    }
+
+
+    Show(name: string) {
+        let i = 0;
+        for (const f of this.Showables()) {
+            if (i < this.Visible.length && f.Name === this.Visible[i].Name) {
+                i++;
+            } else if (i < this.Visible.length && name === this.Visible[i].Name) {
+                // Field already is shown, we do nothing
+                break;
+            } else if (f.Name === name) {
+                this.Visible.splice(i, 0, f);
+                break;
+            }
+        }
+    }
+
+    Hide(name: string) {
+        this.Visible = this.Visible.filter((f) => f.Name !== name);
+    }
+
+    Shown(name: string): boolean {
+        return this.Visible.find((f) => f.Name === name) !== undefined;
+    }
+
+    SortBy(name: string) {
+        const i = this.Sort.indexOf(name);
+        const j = this.Sort.indexOf('-' + name);
+        if (i !== -1) {
+            this.Sort = [this.#InvertSort(this.Sort[i])];
+        } else if (j !== -1) {
+            this.Sort = [this.#InvertSort(this.Sort[j])];
+        } else {
+            this.Sort = [name];
+        }
+    }
+
+    AndSortBy(name: string) {
+        const i = this.Sort.indexOf(name);
+        const j = this.Sort.indexOf('-' + name);
+        if (i !== -1) {
+            this.Sort.splice(i, 1, this.#InvertSort(this.Sort[i]))
+        } else if (j !== -1) {
+            this.Sort.splice(j, 1, this.#InvertSort(this.Sort[j]))
+        } else {
+            this.Sort.push(name)
+        }
+    }
+
+    #InvertSort(name: string) {
+        if (name.startsWith('-')) {
+            return name.substring(1, name.length);
+        } else {
+            return '-' + name;
+        }
+    }
 
     async Next() {
         this.Page = this.Page + 1;
@@ -119,7 +216,8 @@ export class RecordsList {
                 filter: f,
                 sort: s,
                 skipTotal: page !== 1,
-                expand: "Orte,Sammlungen,Werk,__Aufnahme_Reihen_via_Aufnahme.Reihe,__Aufnahme_Akteure_via_Aufnahme.Akteur",
+                expand: this.#expand,
+                requestKey: null,
             })
             .catch((err) => console.log(err))
             .then((res) => {
@@ -143,5 +241,30 @@ export class RecordsList {
                     }
                 }
             })
+    }
+
+    #Expand() {
+        if (!this.#scheme || !this.#scheme.Fields) return "";
+        let exp = "";
+        for (const f of this.Showables()) {
+            if (f.Type.startsWith("Relation")) {
+                if (exp !== "") exp = exp + ",";
+                if (f.Options && f.Options.Expand) {
+                    exp = exp + f.Options.Expand;
+                } else {
+                    exp = exp + f.Name;
+                }
+            } else if (f.Type.startsWith("BackRelation") && f.Options) {
+                if (f.Options.Expand) {
+                    if (exp !== "") exp = exp + ",";
+                    exp = exp + f.Options.Expand;
+                } else if (f.Options.Field)
+                    for (const ef of f.Options.Field) {
+                        if (exp !== "") exp = exp + ",";
+                        exp = exp + f.Options.Table + "_via_" + ef;
+                    }
+            }
+        }
+        return exp;
     }
 }

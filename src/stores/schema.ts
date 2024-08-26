@@ -27,6 +27,17 @@ function GetMergeTypes(table_mus: Table[], table_def: Table[], val_def: Schema[]
                 }
             }
 
+            if (value.BackRelations)
+                for (const f of value.BackRelations) {
+                    let g = f.Group;
+                    if (!g) g = "None";
+                    if (Object.hasOwn(l, g)) {
+                        l[g]!.push(f);
+                    } else {
+                        l[g] = [f];
+                    }
+                }
+
             value.Fields = l;
         }
     }

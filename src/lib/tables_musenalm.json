@@ -37,9 +37,11 @@
 						"Geschrieben",
 						"Gezeichnet",
 						"Gestochen"
-					]
+					],
+					"Expand": "Inhalte_via_Geschaffen.Band.Werk,Inhalte_via_Geschrieben.Band.Werk,Inhalte_via_Gezeichnet.Band.Werk,Inhalte_via_Gestochen.Band.Werk"
 				},
-				"Group": "Norm"
+				"Group": "Norm",
+				"THidden": true
 			}
 		]
 	},
@@ -151,7 +153,7 @@
 		],
 		"BackRelations": [
 			{
-				"Name": "Beiträge",
+				"Name": "Beitraege",
 				"Type": "BackRelationOne",
 				"Options": {
 					"Table": "Inhalte",
@@ -159,7 +161,8 @@
 						"Band"
 					]
 				},
-				"Group": "Norm"
+				"Group": "Norm",
+				"THidden": true
 			}
 		]
 	},
@@ -180,7 +183,8 @@
 				"Type": "RelationOne",
 				"Options": {
 					"Collection": "Aufnahme",
-					"MaxSelect": 1
+					"MaxSelect": 1,
+					"Expand": "Band.Werk,Band.Sammlungen"
 				},
 				"Index": true
 			},

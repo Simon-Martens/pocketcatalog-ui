@@ -6,25 +6,42 @@
 		records: RecordsList;
 		scheme: Table;
 		selectable: boolean;
-		visiblefields: string[];
 	}
 
-	const { records = $bindable(), scheme, selectable = $bindable(), visiblefields = $bindable() }: Props = $props();
+	const { records, scheme, selectable = $bindable() }: Props = $props();
 
 	const more = () => {
 		if (records) records.Next();
 	};
 </script>
 
-<table>
-	{#if records && records.List && records.List.length}
+{#if records.List && records.List.length}
+	<table>
+		<thead>
+			<tr>
+				{#each records.Visible as f (f.Name)}
+					<th>{f.friendlyName ?? f.Name}</th>
+				{/each}
+			</tr>
+		</thead>
 		<tbody>
 			{#each records.List as e (e.id)}
 				<tr>
-					<td>{e.id}</td>
+					{#each records.Visible as f (f.Name)}
+						<td>{e[f.Name]}</td>
+					{/each}
 				</tr>
 			{/each}
 		</tbody>
-	{/if}
-</table>
-<button onclick={more}>More</button>
+	</table>
+{/if}
+
+{#if records.TotalPages !== 0 && records.Page !== records.TotalPages && !records.Loading && !records.Refreshing}
+	<button onclick={more}>Mehr Einträge laden</button>
+{/if}
+
+<style>
+	td {
+		@apply align-top max-w-[32rem];
+	}
+</style>

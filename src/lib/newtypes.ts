@@ -1,12 +1,12 @@
 import type { RecordModel } from 'pocketbase';
 
-export type Group = "EditorNotes" | "System" | "Main" | "Diff" | "MainSymbol" | "Norm" | "Description" | "IncludedIn" | "Includes" | "Transcriptions" | "MediaSpecific" | "MediaMeta" | "Exemplare" | "Collections" | "Research" | "Deprecated" | "Identifier" | "Title" | "Tag" | "File" | "Actors" | "Additional" | "" | "None";
+export type Group = "EditorNotes" | "System" | "Main" | "Diff" | "MainSymbol" | "Norm" | "Description" | "IncludedIn" | "Includes" | "Transcriptions" | "MediaSpecific" | "MediaMeta" | "Exemplare" | "Collections" | "Research" | "Deprecated" | "Identifier" | "Title" | "Tag" | "File" | "Actors" | "Additional" | "Template" | "" | "None";
 
 export type Type = "Text" | "Editor" | "SelectOne" | "SelectUnlimited" | "Json" | "Boolean" | "JsonArrayFixedKeys" | "RelationUnlimited" | "JsonFixedKeys" | "JsonMap" | "RelationOne" | "BackRelationUnlimited" | "BackRelationNM" | "BackRelationOne" | "JsonArrayFields";
 
 export type Bearbeitungsstatus = "Unbekannt" | "Gesichtet" | "In Bearbeitung" | "Rückmeldung" | "Erfasst" | "";
 
-export type TableType = "Collections" | "NMRelations" | "Works" | "Entries" | "Actors" | "Places" | "Serials" | "None";
+export type TableType = "Collections" | "NMRelations" | "Works" | "Entries" | "Actors" | "Places" | "Serials" | "None" | "Templates";
 
 export interface Table {
     Name: string;
