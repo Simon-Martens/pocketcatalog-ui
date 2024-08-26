@@ -6,6 +6,8 @@ export type Type = "Text" | "Editor" | "SelectOne" | "SelectUnlimited" | "Json" 
 
 export type Bearbeitungsstatus = "Unbekannt" | "Gesichtet" | "In Bearbeitung" | "Rückmeldung" | "Erfasst" | "";
 
+export type TableType = "Collections" | "NMRelations" | "Works" | "Entries" | "Actors" | "Places" | "Serials" | "None";
+
 export interface Table {
     Name: string;
     Schema: Schema[];
@@ -16,6 +18,11 @@ export interface Table {
     DeleteRule?: string;
     NoDefaults?: boolean;
     Fields?: FieldList;
+    Type?: TableType;
+    Icon?: string;
+    DefaultFilter?: string;
+    DefaultSort?: string[];
+    ListFilter?: string;
 }
 
 export interface FieldList {

@@ -51,3 +51,7 @@ Einschränkungen:
 - Keine Leseansicht
 - Keine Ansicht für Exemplare
 - Fest generierte IDs.
+
+
+TODO: 
+Serial Work als Unterform von Werk -- hier durch die zusammengesetzte Aufnahme dargestellt.

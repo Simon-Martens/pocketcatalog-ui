@@ -4,7 +4,7 @@ import { fontFamily } from "tailwindcss/defaultTheme";
 const config = {
 	darkMode: ["class"],
 	content: ["./src/**/*.{html,js,svelte,ts}"],
-  safelist: ["dark"],
+	safelist: ["dark"],
 	theme: {
 		container: {
 			center: true,
@@ -15,9 +15,6 @@ const config = {
 		},
 		extend: {
 			colors: {
-				tangerine: "#E39774",
-				paynesgrey: "#326273",
-				moonstone: "#5C9EAD",
 				border: "hsl(var(--border) / <alpha-value>)",
 				input: "hsl(var(--input) / <alpha-value>)",
 				ring: "hsl(var(--ring) / <alpha-value>)",
@@ -58,8 +55,7 @@ const config = {
 				sm: "calc(var(--radius) - 4px)"
 			},
 			fontFamily: {
-				sans: ["Fira Sans", "Helvetica", "Arial", "sans-serif"],
-				serif: ["Lora", "Georgia", "serif"],
+				sans: [...fontFamily.sans]
 			}
 		}
 	},

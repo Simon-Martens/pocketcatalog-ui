@@ -1,14 +1,12 @@
 <script lang="ts">
-	import type { SchemaType, ReiheType, InhaltType, BandType, ColumnType, PersonType } from '$lib/types';
+	import type { Table } from '$lib/newtypes';
 	import TableHead from './TableHead.svelte';
 	import TableRow from './TableRow.svelte';
 	import type { ListResult, RecordModel } from 'pocketbase';
 
-	export let schema: SchemaType;
+	export let schema: Table;
 	export let sort: string[];
-	export let data:
-		| ListResult<RecordModel>
-		| null;
+	export let entries: RecordModel[] | null;
 	export let loading: boolean;
 	export let selected: Set<string>;
 	export let visible: string[];
@@ -23,8 +21,6 @@
 	}
 
 	let tablehead: TableHead;
-
-	$: entries = data?.items;
 
 	$: if (tablehead && entries && selected.size === entries.length) {
 		tablehead.selectAll();
@@ -56,11 +52,11 @@
 </script>
 
 <table class="w-full border-separate border-spacing-0 mb-10">
-	<TableHead bind:this={tablehead} {schema} {sort} bind:visible on:toggleselectall={toggleSelectAll} on:sort bind:selectable/>
+	<TableHead bind:this={tablehead} {schema} {sort} bind:visible on:toggleselectall={toggleSelectAll} on:sort bind:selectable />
 	{#if entries}
 		<tbody>
 			{#each entries as item (item.id)}
-				<TableRow {schema} data={item} {visible} bind:selected on:toggleselectrow={toggleSelectRow} on:open bind:selectable/>
+				<TableRow {schema} data={item} {visible} bind:selected on:toggleselectrow={toggleSelectRow} on:open bind:selectable />
 			{/each}
 		</tbody>
 	{/if}

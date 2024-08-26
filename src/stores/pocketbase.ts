@@ -8,9 +8,9 @@ import type { UserType } from "$lib/types";
 export const api_url: string = PUBLIC_PB_API;
 export const api: Pocketbase = new Pocketbase(PUBLIC_PB_API);
 export const loading: Writable<boolean> = writable(false);
-export const loggedIn: Writable<boolean> = writable(false);
+export const loggedIn: Writable<boolean> = writable(api.authStore.isValid);
 
-export const pushUser = function (u: UserType) {
+export const pushUser = function(u: UserType) {
     api.collection('users').update(u.id, u);
 }
 
@@ -23,7 +23,14 @@ api.beforeSend = (url, options) => {
     return { url, options };
 }
 
-api.afterSend = (respnse, data) => {
+api.afterSend = (response, data) => {
     loading.set(false);
+
+    // TODO: auth check on every request
+    // not unauthenticated, we need to send the request again.
+    // if (response.status === 401) {
+    //     api.collection('users').authRefresh()
+    // }
+
     return Object.assign(data);
 }

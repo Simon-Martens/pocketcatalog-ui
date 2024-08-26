@@ -1,6 +1,7 @@
 [
 	{
 		"Name": "Akteure",
+		"Type": "Actors",
 		"friendlyName": "Personen & Körperschaften",
 		"ListRule": "",
 		"ViewRule": "",
@@ -60,6 +61,7 @@
 	},
 	{
 		"Name": "Orte",
+		"Type": "Places",
 		"ListRule": "",
 		"ViewRule": "",
 		"CreateRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
@@ -91,6 +93,7 @@
 	},
 	{
 		"Name": "Reihen",
+		"Type": "Serials",
 		"ListRule": "",
 		"ViewRule": "",
 		"CreateRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
@@ -128,6 +131,10 @@
 	},
 	{
 		"Name": "Sammlungen",
+		"DefaultSort": [
+			"Name"
+		],
+		"Type": "Collections",
 		"ListRule": "",
 		"ViewRule": "",
 		"CreateRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
@@ -164,7 +171,50 @@
 		]
 	},
 	{
+		"Name": "__Templates",
+		"Type": "Templates",
+		"ListRule": "",
+		"ViewRule": "",
+		"CreateRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
+		"DeleteRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
+		"Schema": [
+			{
+				"Name": "Name",
+				"Type": "Text",
+				"Group": "Main",
+				"Required": true,
+				"Index": true,
+				"Presentable": true
+			},
+			{
+				"Name": "Icon",
+				"Type": "Text",
+				"Group": "MainSymbol",
+				"Required": true
+			},
+			{
+				"Name": "Beschreibung",
+				"Type": "Editor",
+				"Group": "Description"
+			},
+			{
+				"Name": "Felder",
+				"Group": "Exemplare",
+				"Type": "JsonArrayFixedKeys",
+				"Options": {
+					"MaxSize": 4096000,
+					"Keys": [
+						"Name",
+						"Default",
+						"Hidden"
+					]
+				}
+			}
+		]
+	},
+	{
 		"Name": "Werke",
+		"Type": "Works",
 		"ListRule": "",
 		"ViewRule": "",
 		"CreateRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
@@ -220,11 +270,25 @@
 	},
 	{
 		"Name": "Aufnahme",
+		"DefaultSort": [
+			"Werk.BevTitel"
+		],
+		"Type": "Entries",
 		"ListRule": "",
 		"ViewRule": "",
 		"CreateRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
 		"DeleteRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
 		"Schema": [
+			{
+				"Name": "Template",
+				"Group": "Templates",
+				"Required": false,
+				"Type": "RelationOne",
+				"Options": {
+					"Collection": "__Templates",
+					"MaxSelect": 1
+				}
+			},
 			{
 				"Name": "Werk",
 				"Group": "Main",
@@ -256,7 +320,7 @@
 			{
 				"Name": "Titelzusatz",
 				"Type": "Text",
-				"Group": "Transcriptions",
+				"Group": "Title",
 				"TVisibility": false
 			},
 			{
@@ -655,6 +719,14 @@
 				"Options": {
 					"Collection": "Sammlungen"
 				}
+			},
+			{
+				"Name": "Stichworte",
+				"Group": "Tag",
+				"Type": "JsonArray",
+				"Options": {
+					"MaxSize": 4096000
+				}
 			}
 		],
 		"BackRelations": [
@@ -698,6 +770,8 @@
 	{
 		"Name": "__Aufnahme_Reihen",
 		"NoDefaults": true,
+		"Type": "NMRelations",
+		"System": true,
 		"ListRule": "",
 		"ViewRule": "",
 		"CreateRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
@@ -752,6 +826,8 @@
 	{
 		"Name": "__Aufnahme_Akteure",
 		"NoDefaults": true,
+		"Type": "NMRelations",
+		"System": true,
 		"ListRule": "",
 		"ViewRule": "",
 		"CreateRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",

@@ -165,6 +165,8 @@
 	},
 	{
 		"Name": "Inhalte",
+		"Type": "Entries",
+		"Icon": "ri-article-line",
 		"ListRule": "",
 		"ViewRule": "",
 		"CreateRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",

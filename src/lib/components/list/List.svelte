@@ -6,7 +6,6 @@
 	import TableFoot from './TableFoot.svelte';
 	import { createEventDispatcher, onMount } from 'svelte';
 	import ColumnToggler from './TableViewOptions.svelte';
-	import 'remixicon/fonts/remixicon.css';
 	import SearchHistory from './SearchHistory.svelte';
 	import { fade } from 'svelte/transition';
 	import { crossfade } from 'svelte/transition';
@@ -19,11 +18,7 @@
 	export let loading: boolean = false;
 
 	// results of the fetch function
-	export let fetchResult:
-		| ListResult<ReiheType>
-		| ListResult<InhaltType>
-		| ListResult<BandType>
-		| ListResult<PersonType>;
+	export let fetchResult: ListResult<ReiheType> | ListResult<InhaltType> | ListResult<BandType> | ListResult<PersonType>;
 
 	// State of the component
 	export let filter: string;
@@ -42,7 +37,7 @@
 	let blocked: boolean = false;
 
 	let first: boolean = true;
-	
+
 	// Prevent refetchin on first load
 	$: if (filter !== '-1' || sort.length) {
 		filterChanged();
@@ -51,9 +46,9 @@
 	$: filtered = filter !== '';
 
 	$: selectcount = selected ? selected.size : 0;
-	
+
 	const filterChanged = function () {
-		if (!first ) {
+		if (!first) {
 			console.log('filter changed');
 			dispatch('fetch', { page: 1, filter, sort });
 			if (table) table.resetSelected();
@@ -141,26 +136,18 @@
 		refresh();
 	};
 
-	onMount(() => {
-		
-	});
+	onMount(() => {});
 </script>
 
 <div class="mb-8">
 	<h1 class="inline-block text-4xl text-slate-500 px-3">Sammlungen &middot;</h1>
 	<h2 class="inline-block text-4xl text-slate-900 mr-1.5">{schema.Name}</h2>
-	<button
-		title="Neu laden"
-		type="button"
-		aria-label="Refresh"
-		class="w-10 h-10 rounded-full hover:bg-slate-300 justify-center items-center text-center m-0"
-		class:refreshing={refreshTimeoutId}
-		on:click={refresh}>
+	<button title="Neu laden" type="button" aria-label="Refresh" class="w-10 h-10 rounded-full hover:bg-slate-300 justify-center items-center text-center m-0" class:refreshing={refreshTimeoutId} on:click={refresh}>
 		<i class="ri-refresh-line" />
 	</button>
 
 	<SearchHistory
-		schema={schema}
+		{schema}
 		filter={lastinput}
 		on:selecthistory={(value) => {
 			search.setValue(value.detail);
@@ -196,17 +183,11 @@
 
 <!-- It reapeats itself bc the animation will not play otherwise -->
 {#if loading || blocked}
-	<div
-		in:send={{ key: 'message' }}
-		out:receive={{ key: 'message' }}
-		class="bg-slate-50 w-12 h-12 m-0 fixed text-center bottom-8 left-7 rounded-full shadow-lg border border-slate-300 refreshing-infinite">
+	<div in:send={{ key: 'message' }} out:receive={{ key: 'message' }} class="bg-slate-50 w-12 h-12 m-0 fixed text-center bottom-8 left-7 rounded-full shadow-lg border border-slate-300 refreshing-infinite">
 		<i class="ri-hourglass-2-fill inline-block align-middle !text-lg !leading-[3rem]"></i>
 	</div>
 {:else if fetchResult.page !== fetchResult.totalPages && fetchResult.totalPages !== 0}
-	<div
-		in:send={{ key: 'message' }}
-		out:receive={{ key: 'message' }}
-		class="bg-slate-50 px-5 py-2 fixed bottom-8 left-7 rounded-full shadow-lg border border-slate-300">
+	<div in:send={{ key: 'message' }} out:receive={{ key: 'message' }} class="bg-slate-50 px-5 py-2 fixed bottom-8 left-7 rounded-full shadow-lg border border-slate-300">
 		<TableFoot
 			total={fetchResult.totalItems}
 			totalPages={fetchResult.totalPages}
@@ -220,10 +201,7 @@
 			on:npage={nextPage} />
 	</div>
 {:else if fetchResult.totalItems > 0}
-	<div
-		in:send={{ key: 'message' }}
-		out:receive={{ key: 'message' }}
-		class="bg-slate-50 px-5 py-2 fixed bottom-8 left-7 rounded-full shadow-lg border border-slate-300">
+	<div in:send={{ key: 'message' }} out:receive={{ key: 'message' }} class="bg-slate-50 px-5 py-2 fixed bottom-8 left-7 rounded-full shadow-lg border border-slate-300">
 		<TableFoot
 			total={fetchResult.totalItems}
 			totalPages={fetchResult.totalPages}
@@ -237,10 +215,7 @@
 			on:npage={nextPage} />
 	</div>
 {:else}
-	<div
-		in:send={{ key: 'message' }}
-		out:receive={{ key: 'message' }}
-		class="bg-slate-50 px-5 py-2 fixed bottom-8 left-7 rounded-full shadow-lg border border-slate-300">
+	<div in:send={{ key: 'message' }} out:receive={{ key: 'message' }} class="bg-slate-50 px-5 py-2 fixed bottom-8 left-7 rounded-full shadow-lg border border-slate-300">
 		<TableFoot
 			total={fetchResult.totalItems}
 			totalPages={fetchResult.totalPages}

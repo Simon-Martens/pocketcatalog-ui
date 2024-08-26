@@ -31,8 +31,12 @@
 		"@codemirror/legacy-modes": "^6.3.3",
 		"@codemirror/state": "^6.4.0",
 		"@codemirror/view": "^6.23.0",
+		"bits-ui": "^0.21.13",
+		"clsx": "^2.1.1",
 		"codemirror": "^6.0.1",
 		"pocketbase": "^0.21",
-		"remixicon": "^4.1.0"
+		"remixicon": "^4.1.0",
+		"tailwind-merge": "^2.5.2",
+		"tailwind-variants": "^0.2.1"
 	}
 }
