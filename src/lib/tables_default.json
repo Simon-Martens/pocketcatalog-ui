@@ -1,8 +1,11 @@
 [
 	{
-		"Name": "Akteure",
-		"Type": "Actors",
+		"Name": "Agents",
 		"friendlyName": "Personen & Körperschaften",
+		"DefaultSort": [
+			"Name"
+		],
+		"Type": "Agents",
 		"ListRule": "",
 		"ViewRule": "",
 		"CreateRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
@@ -17,14 +20,15 @@
 				"Index": true
 			},
 			{
-				"Name": "Koerperschaft",
+				"Name": "Collective",
+				"friendlyName": "Körperschaft",
 				"Group": "MainSymbol",
 				"Type": "Boolean",
-				"friendlyName": "Körperschaft",
 				"Presentable": true
 			},
 			{
-				"Name": "Lebensdaten",
+				"Name": "Life",
+				"friendlyName": "Lebensdaten",
 				"Group": "Diff",
 				"Type": "Text",
 				"Index": true,
@@ -33,34 +37,41 @@
 		],
 		"BackRelations": [
 			{
-				"Name": "Aufnahmen",
+				"Name": "Entries",
+				"friendlyName": "Aufnahmen",
 				"Type": "BackRelationNM",
 				"Options": {
-					"Table": "__Aufnahme_Akteure",
+					"Table": "__Entries_Agents",
 					"Field": [
-						"Akteur"
+						"Agent"
 					],
-					"Expand": "__Aufnahme_Akteure_via_Akteur.Aufnahme"
+					"Expand": "__Entries_Agents_via_Agent.Entries"
 				},
-				"Group": "List",
+				"Group": "Entries",
 				"THidden": true
 			},
 			{
-				"Name": "Werke",
+				"Name": "Works",
+				"friendlyName": "Werke",
 				"Type": "BackRelationUnlimited",
 				"Options": {
-					"Table": "Werke",
+					"Table": "Works",
 					"Field": [
-						"Schoepfer"
+						"Creators"
 					]
 				},
-				"Group": "List",
+				"Expand": "__Works_via_Creators",
+				"Group": "Works",
 				"THidden": true
 			}
 		]
 	},
 	{
-		"Name": "Orte",
+		"Name": "Places",
+		"friendlyName": "Orte",
+		"DefaultSort": [
+			"Name"
+		],
 		"Type": "Places",
 		"ListRule": "",
 		"ViewRule": "",
@@ -78,22 +89,27 @@
 		],
 		"BackRelations": [
 			{
-				"Name": "Aufnahmen",
+				"Name": "Entries",
+				"friendlyName": "Aufnahmen",
 				"Type": "BackRelationUnlimited",
 				"Options": {
-					"Table": "Aufnahme",
+					"Table": "Entries",
 					"Field": [
-						"Orte"
+						"Places"
 					],
-					"Expand": "Aufnahme_via_Orte.Werk,Aufnahme_via_Orte.Sammlungen"
+					"Expand": "Entries_via_Places.Work"
 				},
-				"Group": "List",
+				"Group": "Entries",
 				"THidden": true
 			}
 		]
 	},
 	{
-		"Name": "Reihen",
+		"Name": "Serials",
+		"DefaultSort": [
+			"Title"
+		],
+		"friendlyName": "Reihen",
 		"Type": "Serials",
 		"ListRule": "",
 		"ViewRule": "",
@@ -101,7 +117,8 @@
 		"DeleteRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
 		"Schema": [
 			{
-				"Name": "Titel",
+				"Name": "Title",
+				"friendlyName": "Titel",
 				"Type": "Text",
 				"Group": "Main",
 				"Required": true,
@@ -109,30 +126,31 @@
 				"Index": true
 			},
 			{
-				"Name": "Erscheinungsfrequenz",
+				"Name": "Frequency",
+				"friendlyName": "Erscheinungsfrequenz",
 				"Type": "Text",
-				"Required": false,
-				"Presentable": true
+				"Required": false
 			}
 		],
 		"BackRelations": [
 			{
 				"Type": "BackRelationNM",
-				"Name": "Aufnahmen",
+				"Name": "Entries",
+				"friendlyName": "Aufnahmen",
 				"Options": {
-					"Table": "__Aufnahme_Reihen",
+					"Table": "__Entries_Serials",
 					"Field": [
-						"Reihe"
+						"Serial"
 					],
-					"Expand": "__Aufnahme_Reihen_via_Reihe.Aufnahme.Werk,__Aufnahme_Reihen_via_Reihe.Aufnahme.Sammlungen"
+					"Expand": "__Entries_Serials_via_Serial.Entry.Work"
 				},
-				"Group": "Norm",
+				"Group": "Entries",
 				"THidden": true
 			}
 		]
 	},
 	{
-		"Name": "Sammlungen",
+		"Name": "Collections",
 		"DefaultSort": [
 			"Name"
 		],
@@ -151,24 +169,25 @@
 				"Index": true
 			},
 			{
-				"Name": "Beschreibung",
+				"Name": "Description",
+				"friendlyName": "Beschreibung",
 				"Group": "Description",
-				"Type": "Editor",
-				"Index": true
+				"Type": "Editor"
 			}
 		],
 		"BackRelations": [
 			{
-				"Name": "Aufnahmen",
+				"Name": "Entries",
+				"friendlyName": "Aufnahmen",
 				"Type": "BackRelationUnlimited",
 				"Options": {
-					"Table": "Aufnahme",
+					"Table": "Entries",
 					"Field": [
-						"Sammlungen"
+						"Collections"
 					],
-					"Expand": "Aufnahme_via_Sammlungen.Werk"
+					"Expand": "Entries_via_Collections.Work"
 				},
-				"Group": "Tag",
+				"Group": "Entries",
 				"THidden": true
 			}
 		]
@@ -196,13 +215,15 @@
 				"Required": true
 			},
 			{
-				"Name": "Beschreibung",
+				"Name": "Description",
+				"friendlyName": "Beschreibung",
 				"Type": "Editor",
 				"Group": "Description"
 			},
 			{
-				"Name": "Felder",
-				"Group": "Exemplare",
+				"Name": "Schema",
+				"friendlyName": "Schema",
+				"Group": "Schema",
 				"Type": "JsonArrayFixedKeys",
 				"Options": {
 					"MaxSize": 4096000,
@@ -216,7 +237,8 @@
 		]
 	},
 	{
-		"Name": "Werke",
+		"Name": "Works",
+		"friendlyName": "Werke",
 		"Type": "Works",
 		"ListRule": "",
 		"ViewRule": "",
@@ -224,29 +246,31 @@
 		"DeleteRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
 		"Schema": [
 			{
-				"Name": "BevTitel",
+				"Name": "PreferredTitle",
 				"Type": "Text",
 				"Group": "Main",
+				"friendlyNameEN": "Prefferred Title",
 				"friendlyName": "Bevorzugter Titel",
 				"Required": true,
 				"Index": true,
 				"Presentable": true
 			},
 			{
-				"Name": "Schoepfer",
+				"Name": "Creator",
 				"Group": "Diff",
 				"friendlyName": "Geistiger Schöpfer",
 				"Presentable": true,
 				"Required": false,
 				"Type": "RelationUnlimited",
 				"Options": {
-					"Collection": "Akteure"
+					"Collection": "Agents"
 				}
 			},
 			{
 				"Name": "Diff",
 				"Group": "Diff",
 				"friendlyName": "Unterscheidende Eigenschaft",
+				"friendlyNameEN": "Differentiating Properties",
 				"Type": "JsonFixedKeys",
 				"Options": {
 					"MaxSize": 4096000,
@@ -260,21 +284,23 @@
 		],
 		"BackRelations": [
 			{
-				"Name": "Aufnahmen",
+				"Name": "Entries",
+				"Group": "Entries",
 				"Type": "BackRelationOne",
 				"Options": {
-					"Table": "Aufnahme",
+					"Table": "Entries",
 					"Field": [
-						"Werk"
+						"Work"
 					]
 				}
 			}
 		]
 	},
 	{
-		"Name": "Aufnahme",
+		"Name": "Entries",
+		"friendlyName": "Aufnahmen",
 		"DefaultSort": [
-			"Werk.BevTitel"
+			"Work.PreferredTitle"
 		],
 		"Type": "Entries",
 		"ListRule": "",
@@ -293,75 +319,100 @@
 				}
 			},
 			{
-				"Name": "Werk",
+				"Name": "Work",
+				"friendlyName": "Werk",
 				"Group": "Main",
 				"Presentable": true,
 				"Required": false,
 				"Type": "RelationOne",
 				"Options": {
-					"Collection": "Werke",
+					"Collection": "Works",
 					"MaxSelect": 1
 				}
 			},
 			{
-				"Name": "UebergeordneteAufnahme",
-				"Group": "IncludedIn",
+				"Name": "Order",
+				"Group": "Order",
+				"THidden": true,
+				"EHidden": true,
+				"Type": "Number"
+			},
+			{
+				"Name": "Number",
+				"Group": "Count",
+				"friendlyName": "Zählung innerhalb des Werkes",
+				"Required": false,
+				"Type": "Text",
+				"THidden": true
+			},
+			{
+				"Name": "ParentEntry",
+				"friendlynameEN": "Parent Entry",
+				"friendlyName": "Übergeordnete Aufnahme",
+				"Group": "Parent",
 				"Type": "RelationOne",
 				"THidden": true,
 				"TVisibility": false,
 				"Options": {
-					"Collection": "Aufnahme",
+					"Collection": "Entries",
 					"MaxSelect": 1,
-					"Expand": "Aufnahme.Werk,Aufnahme.Sammlungen"
+					"Expand": "Entries.Work.Creators"
 				}
 			},
 			{
-				"Name": "Titel",
+				"Name": "Title",
+				"friendlyName": "Titel",
 				"Type": "Text",
 				"Required": true,
 				"Group": "Title"
 			},
 			{
-				"Name": "Titelzusatz",
+				"Name": "AdditionalTitle",
+				"friendlyName": "Titelzusatz",
+				"friendlynameEN": "Additional Title",
 				"Type": "Text",
 				"Group": "Title",
 				"TVisibility": false
 			},
 			{
-				"Name": "Datum",
-				"Type": "Text",
-				"Group": "Transcriptions"
+				"Name": "Date",
+				"friendyName": "Datum",
+				"Type": "Number",
+				"Group": "Date"
 			},
 			{
-				"Name": "Orte",
+				"Name": "Places",
+				"friendlyName": "Orte",
 				"Presentable": true,
 				"Required": false,
-				"Group": "Norm",
+				"Group": "Places",
 				"Type": "RelationUnlimited",
 				"Options": {
-					"Collection": "Orte"
+					"Collection": "Places"
 				}
 			},
 			{
-				"Name": "Ausgabebezeichnung",
+				"Name": "Issue",
+				"friendlyName": "Ausgabebezeichnung",
 				"Type": "Text",
-				"Group": "Transcriptions",
+				"Group": "Issue"
+			},
+			{
+				"Name": "Extend",
+				"friendlyName": "Umfang",
+				"Type": "Text",
+				"Group": "Extend",
 				"TVisibility": false
 			},
 			{
-				"Name": "Umfang",
-				"Type": "Text",
-				"Group": "MediaSpecific",
-				"TVisibility": false
-			},
-			{
-				"Name": "Masse",
+				"Name": "Dimensions",
 				"friendlyName": "Maße",
 				"Type": "Text",
 				"Group": "MediaSpecific"
 			},
 			{
-				"Name": "Sprache",
+				"Name": "Language",
+				"friendlyName": "Sprache",
 				"Type": "SelectUnlimited",
 				"Required": true,
 				"Default": "ger",
@@ -558,7 +609,9 @@
 				}
 			},
 			{
-				"Name": "Medientyp",
+				"Name": "MediaType",
+				"friendlynameEN": "Media Type",
+				"friendlyName": "Medientyp",
 				"Type": "SelectUnlimited",
 				"Required": true,
 				"Default": "ohne Hilfsmittel",
@@ -580,7 +633,8 @@
 				}
 			},
 			{
-				"Name": "Datentraeger",
+				"Name": "CarrierType",
+				"friendlynameEN": "Carrier Type",
 				"friendlyName": "Datenträger",
 				"Type": "SelectUnlimited",
 				"Required": true,
@@ -651,7 +705,9 @@
 				}
 			},
 			{
-				"Name": "Inhaltstyp",
+				"Name": "ContentType",
+				"friendlynameEN": "Content Type",
+				"friendlyName": "Inhaltstyp",
 				"Type": "SelectUnlimited",
 				"Required": true,
 				"Default": "Text",
@@ -689,91 +745,81 @@
 				}
 			},
 			{
-				"Name": "Exemplare",
-				"Group": "Exemplare",
-				"TVisibility": false,
-				"Type": "JsonArrayFixedKeys",
-				"Options": {
-					"MaxSize": 4096000,
-					"Keys": [
-						"Besitzer:in",
-						"URL",
-						"Standort",
-						"Signatur",
-						"Zustand",
-						"Anmerkung"
-					],
-					"View": "all"
-				}
-			},
-			{
-				"Name": "Erschlossen",
-				"Group": "System",
-				"Type": "JsonArrayFields",
-				"Options": {
-					"MaxSize": 4096000
-				}
-			},
-			{
-				"Name": "Sammlungen",
-				"Group": "Collections",
-				"Index": true,
-				"Required": false,
-				"Type": "RelationUnlimited",
-				"Options": {
-					"Collection": "Sammlungen"
-				}
-			},
-			{
-				"Name": "Stichworte",
+				"Name": "Tags",
+				"friendlyName": "Stichworte",
 				"Group": "Tag",
 				"Type": "JsonArray",
 				"Options": {
-					"MaxSize": 4096000
+					"MaxSize": 4096000,
+					"Schema": {
+						"$schema": "https://json-schema.org/draft/2020-12/schema",
+						"$id": "https://db.tss-hd.de/tags.schema.json",
+						"title": "Tags",
+						"description": "Entry Tags",
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					}
 				}
 			}
 		],
 		"BackRelations": [
 			{
-				"Name": "Akteure",
+				"Name": "Agents",
 				"Type": "BackRelationNM",
 				"Options": {
-					"Table": "__Aufnahme_Akteure",
+					"Table": "__Entries_Agents",
 					"Field": [
-						"Aufnahme"
+						"Entry"
 					],
-					"Expand": "__Aufnahme_Akteure_via_Aufnahme.Akteur"
+					"Expand": "__Entries_Agents_via_Entry.Agent"
 				},
-				"Group": "Norm"
+				"Group": "Agents"
 			},
 			{
-				"Name": "Reihen",
+				"Name": "Serials",
 				"Type": "BackRelationNM",
 				"Options": {
-					"Table": "__Aufnahme_Reihen",
+					"Table": "__Entries_Serials",
 					"Field": [
-						"Aufnahme"
+						"Entry"
 					],
-					"Expand": "__Aufnahme_Reihen_via_Aufnahme.Reihe"
+					"Expand": "__Entries_Reihen_via_Entry.Serial"
 				},
-				"Group": "Norm"
+				"Group": "Serials"
 			},
 			{
-				"Name": "Untergeordnete Aufnahme",
+				"Name": "ChildEntries",
+				"friendlyNameEN": "Child Entries",
+				"frienlyName": "Untergeordnete Aufnahmen",
 				"Type": "BackRelationOne",
 				"Options": {
-					"Table": "Aufnahme",
+					"Table": "Entries",
 					"Field": [
-						"UebergeordneteAufnahme"
+						"ParentEntry"
 					]
 				},
-				"Group": "Includes",
+				"Group": "Children",
+				"THidden": true
+			},
+			{
+				"Name": "Contents",
+				"frienlyName": "Beiträge",
+				"Type": "BackRelationOne",
+				"Options": {
+					"Table": "Contents",
+					"Field": [
+						"Entry"
+					]
+				},
+				"Group": "Contents",
 				"THidden": true
 			}
 		]
 	},
 	{
-		"Name": "__Aufnahme_Reihen",
+		"Name": "__Entries_Serials",
 		"NoDefaults": true,
 		"Type": "NMRelations",
 		"System": true,
@@ -783,18 +829,20 @@
 		"DeleteRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
 		"Schema": [
 			{
-				"Name": "Aufnahme",
+				"Name": "Entry",
+				"Group": "Entries",
 				"Presentable": true,
 				"Index": true,
 				"Required": true,
 				"Type": "RelationOne",
 				"Options": {
-					"Collection": "Aufnahme",
+					"Collection": "Entries",
 					"MaxSelect": 1
 				}
 			},
 			{
-				"Name": "Beziehung",
+				"Name": "Relation",
+				"Group": "Relation",
 				"Type": "SelectOne",
 				"Presentable": true,
 				"Required": true,
@@ -810,26 +858,28 @@
 				}
 			},
 			{
-				"Name": "Reihe",
+				"Name": "Serial",
+				"Group": "Serials",
 				"Index": true,
 				"Presentable": true,
 				"Required": true,
 				"Type": "RelationOne",
 				"Options": {
-					"Collection": "Reihen",
+					"Collection": "Serials",
 					"MaxSelect": 1
 				}
 			},
 			{
-				"Name": "Zaehlung",
-				"friendlyName": "Zählung",
+				"Name": "Number",
+				"friendlyName": "Zählung innerhalb der Reihe",
+				"Group": "Count",
 				"Required": false,
 				"Type": "Text"
 			}
 		]
 	},
 	{
-		"Name": "__Aufnahme_Akteure",
+		"Name": "__Entries_Agents",
 		"NoDefaults": true,
 		"Type": "NMRelations",
 		"System": true,
@@ -839,18 +889,20 @@
 		"DeleteRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
 		"Schema": [
 			{
-				"Name": "Aufnahme",
+				"Name": "Entry",
+				"Group": "Entries",
 				"Presentable": true,
 				"Required": true,
 				"Index": true,
 				"Type": "RelationOne",
 				"Options": {
-					"Collection": "Aufnahme",
+					"Collection": "Entries",
 					"MaxSelect": 1
 				}
 			},
 			{
-				"Name": "Beziehung",
+				"Name": "Relation",
+				"Group": "Relation",
 				"Type": "SelectOne",
 				"Presentable": true,
 				"Required": true,
@@ -863,36 +915,313 @@
 						"Vertrieb",
 						"Stecher:in",
 						"Zeichner:in",
-						"Übersetzer:in"
+						"Übersetzer:in",
+						"Komponist:in",
+						"Kartograf:in",
+						"Künstler:in",
+						"Maler:in",
+						"Lektor:in",
+						"Mitarbeiter:in",
+						"Übersetzer:in",
+						"Schöpfer"
 					],
 					"MaxSelect": 1
 				}
 			},
 			{
-				"Name": "Akteur",
+				"Name": "Agent",
+				"Group": "Agents",
 				"Presentable": true,
 				"Required": false,
 				"Index": true,
 				"Type": "RelationOne",
 				"Options": {
-					"Collection": "Akteure",
+					"Collection": "Agents",
 					"MaxSelect": 1
 				},
-				"Or": "Angabe"
+				"Or": "Pseudonym"
 			},
 			{
-				"Name": "Erschlossen",
-				"Type": "Boolean"
-			},
-			{
-				"Name": "Unsicher",
-				"Type": "Boolean"
-			},
-			{
-				"Name": "Angabe",
+				"Name": "Pseudonym",
+				"friendlyName": "Angabe / Pseudonym",
 				"Group": "Transcriptions",
 				"Type": "Text",
-				"Or": "Akteur"
+				"Options": {
+					"Transcription": {
+						"For": "Agent"
+					}
+				},
+				"Or": "Agent"
+			}
+		]
+	},
+	{
+		"Name": "Items",
+		"friendlyName": "Exemplare",
+		"Type": "Items",
+		"ListRule": "",
+		"ViewRule": "",
+		"CreateRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
+		"DeleteRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
+		"Schema": [
+			{
+				"Name": "Entry",
+				"Group": "Entries",
+				"friendlyName": "Aufnahme",
+				"Presentable": true,
+				"Required": true,
+				"Index": true,
+				"Type": "RelationOne",
+				"Options": {
+					"Collection": "Entries",
+					"MaxSelect": 1
+				}
+			},
+			{
+				"Name": "Mark",
+				"friendlyName": "Signatur",
+				"Type": "Text",
+				"Index": true,
+				"Presentable": true,
+				"Unique": true,
+				"Group": "Identifier"
+			},
+			{
+				"Name": "Owner",
+				"friendlyName": "Eigentümer:in",
+				"Type": "Text"
+			},
+			{
+				"Name": "Location",
+				"friendlyName": "Standort",
+				"Type": "Text",
+				"Presentable": true,
+				"Group": "Identifier"
+			},
+			{
+				"Name": "Condition",
+				"friendlyName": "Zustand & Mängel",
+				"Type": "Text"
+			},
+			{
+				"Name": "URL",
+				"Type": "Text",
+				"Group": "URL"
+			},
+			{
+				"Name": "Medium",
+				"Group": "MediaMeta",
+				"Type": "SelectUnlimited",
+				"Presentable": true,
+				"Required": true,
+				"Options": {
+					"Values": [
+						"Original",
+						"Reproduktion",
+						"Mikrofiche",
+						"Datei",
+						"URL"
+					],
+					"MaxSelect": 5
+				}
+			},
+			{
+				"Name": "Scans",
+				"Type": "File",
+				"Options": {
+					"MaxSelect": 1000,
+					"MaxSize": 524288000,
+					"MimeTypes": [
+						"application/pdf",
+						"image/png",
+						"image/vnd.mozilla.apng",
+						"image/jpeg",
+						"image/jp2",
+						"image/jpx",
+						"image/jpm",
+						"image/gif",
+						"image/jxs",
+						"image/jxl",
+						"image/x-xpixmap",
+						"image/vnd.adobe.photoshop",
+						"image/webp",
+						"image/tiff",
+						"image/bmp",
+						"image/x-icon",
+						"image/vnd.djvu",
+						"image/bpg",
+						"image/vnd.dwg",
+						"image/x-icns",
+						"image/heic",
+						"image/heic-sequence",
+						"image/heif",
+						"image/heif-sequence",
+						"image/vnd.radiance",
+						"image/x-xcf",
+						"image/x-gimp-pat",
+						"image/x-gimp-gbr",
+						"image/avif",
+						"image/jxr",
+						"image/svg+xml"
+					],
+					"Thumbs": [
+						"100x0",
+						"250x0",
+						"500x0"
+					],
+					"Protected": false
+				},
+				"Group": "File"
+			}
+		]
+	},
+	{
+		"Name": "Contents",
+		"friendlyName": "Beiträge",
+		"Type": "Contents",
+		"DefaultSort": [
+			"Entry.Work.PreferredTitle",
+			"Order"
+		],
+		"ListRule": "",
+		"ViewRule": "",
+		"CreateRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
+		"DeleteRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
+		"Schema": [
+			{
+				"Name": "Entry",
+				"friendlyName": "Aufnahme",
+				"Group": "Main",
+				"Presentable": true,
+				"Required": true,
+				"Index": true,
+				"Type": "RelationOne",
+				"Options": {
+					"Collection": "Entries",
+					"MaxSelect": 1,
+					"Expand": "Entry.Work.Creators"
+				}
+			},
+			{
+				"Name": "Order",
+				"friendlyName": "Nummer",
+				"ShortName": "Obj.",
+				"Group": "Order",
+				"Type": "Number",
+				"Required": true,
+				"Presentable": true,
+				"Index": true
+			},
+			{
+				"Name": "Extend",
+				"friendlyName": "Umfang",
+				"Type": "Text",
+				"Group": "Extend"
+			},
+			{
+				"Name": "Title",
+				"friendlyName": "Titel",
+				"Type": "Text",
+				"Group": "Title",
+				"Index": true
+			},
+			{
+				"Name": "Incipit",
+				"friendlyName": "Incipit",
+				"Type": "Text",
+				"Index": true,
+				"Group": "Title"
+			}
+		],
+		"BackRelations": [
+			{
+				"Name": "Agents",
+				"Type": "BackRelationNM",
+				"Options": {
+					"Table": "__Contents_Agents",
+					"Field": [
+						"Entry"
+					],
+					"Expand": "__Contents_Agents_via_Content.Agent"
+				},
+				"Group": "Agents"
+			}
+		]
+	},
+	{
+		"Name": "__Contents_Agents",
+		"NoDefaults": true,
+		"Type": "NMRelations",
+		"System": true,
+		"ListRule": "",
+		"ViewRule": "",
+		"CreateRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
+		"DeleteRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
+		"Schema": [
+			{
+				"Name": "Content",
+				"Group": "Contents",
+				"Presentable": true,
+				"Required": true,
+				"Index": true,
+				"Type": "RelationOne",
+				"Options": {
+					"Collection": "Contents",
+					"MaxSelect": 1
+				}
+			},
+			{
+				"Name": "Relation",
+				"Group": "Relation",
+				"Type": "SelectOne",
+				"Presentable": true,
+				"Required": true,
+				"Options": {
+					"Values": [
+						"Autor:in",
+						"Herausgeber:in",
+						"Verlag",
+						"Druck",
+						"Vertrieb",
+						"Kupferstecher:in",
+						"Zeichner:in",
+						"Übersetzer:in",
+						"Komponist:in",
+						"Kartograf:in",
+						"Künstler:in",
+						"Maler:in",
+						"Lektor:in",
+						"Mitarbeiter:in",
+						"Übersetzer:in",
+						"Schöpfer"
+					],
+					"MaxSelect": 1
+				}
+			},
+			{
+				"Name": "Agent",
+				"Group": "Agents",
+				"Presentable": true,
+				"Required": false,
+				"Index": true,
+				"Type": "RelationOne",
+				"Options": {
+					"Collection": "Agents",
+					"MaxSelect": 1
+				},
+				"Or": "Pseudonym"
+			},
+			{
+				"Name": "Pseudonym",
+				"friendlyName": "Angabe / Pseudonym",
+				"Group": "Transcriptions",
+				"Type": "Text",
+				"Options": {
+					"Transcription": {
+						"For": "Agent"
+					}
+				},
+				"Or": "Agent"
 			}
 		]
 	}

@@ -1,16 +1,17 @@
 import type { RecordModel } from 'pocketbase';
 
-export type Group = "EditorNotes" | "System" | "Main" | "Diff" | "MainSymbol" | "Norm" | "Description" | "IncludedIn" | "Includes" | "Transcriptions" | "MediaSpecific" | "MediaMeta" | "Exemplare" | "Collections" | "Research" | "Deprecated" | "Identifier" | "Title" | "Tag" | "File" | "Actors" | "Additional" | "Template" | "" | "None";
-
+export type Group = "Main" | "Serials" | "Items" | "MainSymbol" | "Diff" | "Entries" | "Works" | "Places" | "Collections" | "Description" | "Schema" | "Template" | "Order" | "Count" | "Parent" | "Title" | "Date" | "Issue" | "MediaSpecific" | "MediaMeta" | "Tag" | "Agents" | "Children" | "Relation" | "Transcriptions" | "Identifier" | "URL" | "Contents" | "Research" | "Deprecated" | "EditorNotes" | "Annotations" | "FieldMetaData" | "Fields" | "State" | "" | "None" | "Extend";
 export type Type = "Text" | "Editor" | "SelectOne" | "SelectUnlimited" | "Json" | "Boolean" | "JsonArrayFixedKeys" | "RelationUnlimited" | "JsonFixedKeys" | "JsonMap" | "RelationOne" | "BackRelationUnlimited" | "BackRelationNM" | "BackRelationOne" | "JsonArrayFields";
 
-export type Bearbeitungsstatus = "Unbekannt" | "Gesichtet" | "In Bearbeitung" | "Rückmeldung" | "Erfasst" | "";
+export type Bearbeitungsstatus = "Unbekannt" | "Gesichtet" | "In Bearbeitung" | "Rückmeldung" | "Erfasst" | "Überprüfen" | "";
 
-export type TableType = "Collections" | "NMRelations" | "Works" | "Entries" | "Actors" | "Places" | "Serials" | "None" | "Templates";
+export type TableType = "Collections" | "NMRelations" | "Works" | "Entries" | "Agents" | "Places" | "Serials" | "None" | "Templates" | "Contents" | "Items";
 
 export interface Table {
     Name: string;
     Schema: Schema[];
+    friendlyName?: string;
+    friendlyNameEN?: string;
     BackRelations?: Schema[];
     ListRule?: string;
     ViewRule?: string;
@@ -26,29 +27,43 @@ export interface Table {
 }
 
 export interface FieldList {
-    EditorNotes?: Schema[];
-    System?: Schema[];
-    Main?: Schema[];
-    Diff?: Schema[];
+    Main: Schema[];
     MainSymbol?: Schema[];
-    Norm?: Schema[];
+    Diff?: Schema[];
+    Entries?: Schema[];
+    Works?: Schema[];
+    Places?: Schema[];
+    Collections?: Schema[];
     Description?: Schema[];
-    IncludedIn?: Schema[];
-    Includes?: Schema[];
+    Schema?: Schema[];
+    Template?: Schema[];
+    Order?: Schema[];
+    Count?: Schema[];
+    Parent?: Schema[];
+    Title?: Schema[];
+    Date?: Schema[];
+    Items?: Schema[];
+    Serials?: Schema[];
+    Issue?: Schema[];
     MediaSpecific?: Schema[];
     MediaMeta?: Schema[];
-    Exemplare?: Schema[];
-    Collections?: Schema[];
+    Tag?: Schema[];
+    Agents?: Schema[];
+    Children?: Schema[];
+    Relation?: Schema[];
+    Transcriptions?: Schema[];
+    Identifier?: Schema[];
+    URL?: Schema[];
+    Contents?: Schema[];
     Research?: Schema[];
     Deprecated?: Schema[];
-    Identifier?: Schema[];
-    Title?: Schema[];
-    Tag?: Schema[];
-    File?: Schema[];
-    Actors?: Schema[];
-    Additional?: Schema[];
+    EditorNotes?: Schema[];
+    Annotations?: Schema[];
+    FieldMetaData?: Schema[];
+    Fields?: Schema[];
+    State?: Schema[];
     None?: Schema[];
-    Transcriptions?: Schema[];
+    Extend?: Schema[];
 }
 
 export interface Schema {
@@ -61,6 +76,7 @@ export interface Schema {
     Options?: Options;
     Internal?: boolean;
     friendlyName?: string;
+    friendlyNameEN?: string;
     Presentable?: boolean;
     Required?: boolean;
     ShortName?: string;
@@ -96,3 +112,7 @@ export interface Entity extends RecordModel {
     Bearbeitungsstatus: Bearbeitungsstatus;
 }
 
+export interface Collection extends RecordModel {
+    Name: string;
+    Description?: string;
+}

@@ -78,28 +78,43 @@ export class RecordsList {
     * Showables() {
         const list = this.#scheme.Fields;
         if (!list) return;
+        yield* this.#ShowablesArray(list.State);
+        yield* this.#ShowablesArray(list.Template);
         yield* this.#ShowablesArray(list.MainSymbol);
         yield* this.#ShowablesArray(list.Main);
         yield* this.#ShowablesArray(list.Diff);
+        yield* this.#ShowablesArray(list.Serials);
+        yield* this.#ShowablesArray(list.Parent);
+        yield* this.#ShowablesArray(list.Order);
         yield* this.#ShowablesArray(list.Title);
+        yield* this.#ShowablesArray(list.Count);
+        yield* this.#ShowablesArray(list.Issue);
+        yield* this.#ShowablesArray(list.Date);
+        yield* this.#ShowablesArray(list.None);
         yield* this.#ShowablesArray(list.Description);
         yield* this.#ShowablesArray(list.Transcriptions);
-        yield* this.#ShowablesArray(list.Norm);
-        yield* this.#ShowablesArray(list.Actors);
-        yield* this.#ShowablesArray(list.None);
-        yield* this.#ShowablesArray(list.MediaSpecific);
+        yield* this.#ShowablesArray(list.Extend);
         yield* this.#ShowablesArray(list.Research);
+        yield* this.#ShowablesArray(list.Identifier);
+        yield* this.#ShowablesArray(list.URL);
+        yield* this.#ShowablesArray(list.Entries);
+        yield* this.#ShowablesArray(list.Works);
+        yield* this.#ShowablesArray(list.Places);
+        yield* this.#ShowablesArray(list.Agents);
+        yield* this.#ShowablesArray(list.Contents);
+        yield* this.#ShowablesArray(list.Items);
+        yield* this.#ShowablesArray(list.Children);
+        yield* this.#ShowablesArray(list.MediaSpecific);
         yield* this.#ShowablesArray(list.Tag);
         yield* this.#ShowablesArray(list.Collections);
         yield* this.#ShowablesArray(list.MediaMeta);
-        yield* this.#ShowablesArray(list.Identifier);
-        yield* this.#ShowablesArray(list.Exemplare);
-        yield* this.#ShowablesArray(list.File);
-        yield* this.#ShowablesArray(list.Includes);
-        yield* this.#ShowablesArray(list.IncludedIn);
-        yield* this.#ShowablesArray(list.Additional);
+        yield* this.#ShowablesArray(list.Annotations);
         yield* this.#ShowablesArray(list.EditorNotes);
         yield* this.#ShowablesArray(list.Deprecated);
+        yield* this.#ShowablesArray(list.Relation);
+        yield* this.#ShowablesArray(list.Schema);
+        yield* this.#ShowablesArray(list.FieldMetaData);
+        yield* this.#ShowablesArray(list.Fields);
     }
 
     * #ShowablesArray(schemata: Schema[] | undefined | null) {
@@ -219,7 +234,7 @@ export class RecordsList {
                 expand: this.#expand,
                 requestKey: null,
             })
-            .catch((err) => console.log(err))
+            .catch((err) => { console.log(err); throw err; })
             .then((res) => {
                 if (page === 1) {
                     if (!res) {

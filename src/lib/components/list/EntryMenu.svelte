@@ -12,12 +12,11 @@
 	}
 
 	const { perPage, scheme, records = $bindable() }: Props = $props();
-	const filtered = $derived(records.Filter !== '');
 </script>
 
-<div class="px-8 py-2 border-b bg-slate-50 flex flex-row sticky top-0 gap-x-1">
+<div class="px-8 py-2.5 border-b bg-slate-50 flex flex-row sticky top-0 gap-x-1">
 	<h2 class="text-slate-500 py-0.5">
-		<span class="">Sammlungen&nbsp;&middot;&nbsp;</span><span class="text-slate-900 font-bold">{scheme.Name}</span>
+		<span class="">Sammlungen&nbsp;&middot;&nbsp;</span><span class="text-slate-900 font-bold">{scheme.friendlyName ?? scheme.Name}</span>
 	</h2>
 	<Tooltip.Root>
 		<Tooltip.Trigger>
@@ -32,32 +31,13 @@
 
 	<TableViewOptions {records} {scheme} />
 
-	<Tooltip.Root>
-		<Tooltip.Trigger>
-			<input type="checkbox" bind:checked={records.Selectable} class="!ml-1 w-4 h-4 !my-1 justify-center items-center text-center accent-black shadow-none" />
-		</Tooltip.Trigger>
-		<Tooltip.Content side="bottom">
-			<p class="text-base">Zeilenauswahl</p>
-		</Tooltip.Content>
-	</Tooltip.Root>
-
 	<div class="grow"></div>
 	<div class="">
 		{#if records.Loading || records.Refreshing || !records.List}
-			<i class="ri-hourglass-2-fill inline-block align-middle !text-base refreshing"> </i>
+			<i class="ri-hourglass-2-fill inline-block align-middle !text-base refreshing-infinite"></i>
 		{:else}
 			<!-- TODO: selected -->
-			<TableFoot
-				total={records.TotalItems}
-				totalPages={records.TotalPages}
-				{perPage}
-				page={records.Page}
-				{filtered}
-				selected={0}
-				on:resetfilter={() => {}}
-				on:resetselect={() => {}}
-				on:deleteselected={() => {}}
-				on:npage={() => records.Next()} />
+			<TableFoot {records} {perPage} />
 		{/if}
 	</div>
 </div>
@@ -72,7 +52,7 @@
 		animation: refresh 600ms ease-out;
 	}
 
-	i.refreshing-infinite i {
+	i.refreshing-infinite {
 		animation: refresh 900ms infinite;
 	}
 

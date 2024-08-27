@@ -1,22 +1,80 @@
 [
 	{
-		"Name": "Anmerkungen",
+		"Name": "Annotations",
+		"friendlyName": "Anmerkungen",
 		"Type": "Editor",
-		"Group": "Additional",
+		"Group": "Annotations",
 		"THidden": true,
 		"TVisibility": false,
 		"Required": false
 	},
 	{
-		"Name": "Bearbeitungsvermerk",
+		"Name": "Notes",
+		"friendlyName": "Bearbeitungsvermerk",
 		"Group": "EditorNotes",
 		"Type": "Editor",
 		"Required": false,
 		"TVisibility": false
 	},
 	{
-		"Name": "Feldanmerkungen",
-		"Group": "System",
+		"Name": "FieldMetaData",
+		"Group": "FieldMetaData",
+		"TVisibility": false,
+		"THidden": true,
+		"EVisibility": false,
+		"EHidden": true,
+		"Type": "JsonMap",
+		"Required": false,
+		"Options": {
+			"MaxSize": 4096000,
+			"Schema": {
+				"$schema": "https://json-schema.org/draft/2020-12/schema",
+				"$id": "https://db.tss-hd.de/fieldsmetadata.schema.json",
+				"title": "Field Meta Data",
+				"description": "MetaData for Table Fields",
+				"type": "array",
+				"items": {
+					"type": "object",
+					"properties": {
+						"Field": {
+							"description": "The name of the field the data belongs to",
+							"type": "string"
+						},
+						"TBefore": {
+							"description": "Text that comes before the field Value",
+							"type": "string"
+						},
+						"TAfter": {
+							"description": "Text that comes after the field Value",
+							"type": "string"
+						},
+						"Unsure": {
+							"description": "Whether the determination of the Value is unsure",
+							"type": "boolean"
+						},
+						"Deduced": {
+							"description": "Whether the value is based on metaknowledge",
+							"type": "boolean"
+						},
+						"Notes": {
+							"description": "Notes regarding the content of the Field",
+							"type": "string"
+						},
+						"EditorNotes": {
+							"description": "Editor notes regarding the content of the Field",
+							"type": "string"
+						},
+						"required": [
+							"Field"
+						]
+					}
+				}
+			}
+		}
+	},
+	{
+		"Name": "Fields",
+		"Group": "Fields",
 		"TVisibility": false,
 		"THidden": true,
 		"EVisibility": false,
@@ -28,22 +86,9 @@
 		}
 	},
 	{
-		"Name": "Felder",
-		"Group": "System",
-		"TVisibility": false,
-		"THidden": true,
-		"EVisibility": false,
-		"EHidden": true,
-		"Type": "JsonMap",
-		"Required": false,
-		"Options": {
-			"MaxSize": 4096000
-		}
-	},
-	{
-		"Name": "Bearbeitungsstatus",
+		"Name": "State",
 		"Type": "Select",
-		"Group": "System",
+		"Group": "State",
 		"THidden": true,
 		"TVisibility": false,
 		"EVisibility": false,
@@ -56,9 +101,21 @@
 				"Gesichtet",
 				"In Bearbeitung",
 				"Rückmeldung",
+				"Überprüfen",
 				"Erfasst"
 			],
 			"MaxSelect": 1
+		}
+	},
+	{
+		"Name": "Collections",
+		"friendlyName": "Sammlungen",
+		"Group": "Collections",
+		"Index": true,
+		"Required": false,
+		"Type": "RelationUnlimited",
+		"Options": {
+			"Collection": "Sammlungen"
 		}
 	}
 ]

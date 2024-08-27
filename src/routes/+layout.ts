@@ -1,6 +1,7 @@
 import { api } from '$stores/pocketbase';
 import { redirect } from '@sveltejs/kit';
 import type { LayoutLoad } from './$types';
+import { Collections } from '$stores/collections.svelte';
 
 // This is also needed bc local storage is not available server side 
 // and gets deleted on reload otherwise
@@ -25,5 +26,7 @@ export const load: LayoutLoad = function({ url }) {
     //         throw redirect(303, `/login?redirectTo=${url.pathname}`);
     //     });
 
-    return {}
+    return {
+        collections: new Collections(),
+    }
 }

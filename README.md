@@ -51,7 +51,8 @@ Einschränkungen:
 - Keine Leseansicht
 - Keine Ansicht für Exemplare
 - Fest generierte IDs.
-
+- Keine Timespan, das wären Normdaten mit notBefore, notAfter, From, To, Date, Name
 
 TODO: 
-Serial Work als Unterform von Werk -- hier durch die zusammengesetzte Aufnahme dargestellt.
+- Keine Backrelations bei Werken und Sammlungen
+

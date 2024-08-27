@@ -20,22 +20,24 @@ function GetMergeTypes(table_mus: Table[], table_def: Table[], val_def: Schema[]
             for (const f of value.Schema) {
                 let g = f.Group;
                 if (!g) g = "None";
-                if (Object.hasOwn(l, g)) {
-                    l[g]!.push(f);
-                } else {
-                    l[g] = [f];
+                if (!Object.hasOwn(l, g)) {
+                    // @ts-ignore
+                    l[g] = []
                 }
+                // @ts-ignore
+                l[g].push(f);
             }
 
             if (value.BackRelations)
                 for (const f of value.BackRelations) {
                     let g = f.Group;
                     if (!g) g = "None";
-                    if (Object.hasOwn(l, g)) {
-                        l[g]!.push(f);
-                    } else {
-                        l[g] = [f];
+                    if (!Object.hasOwn(l, g)) {
+                        // @ts-ignore
+                        l[g] = [];
                     }
+                    // @ts-ignore
+                    l[g].push(f);
                 }
 
             value.Fields = l;
@@ -59,24 +61,12 @@ function MergeCollection(col1: Table[], col2: Table[]) {
             map[t.Name] = t
         } else {
             let val = map[t.Name]
-            if (t.Name !== "") {
-                val.Name = t.Name;
-            }
 
-            if (t.Type) {
-                val.Type = t.Type;
-            }
-
-            if (t.DefaultSort) {
-                val.DefaultSort = t.DefaultSort;
-            }
-
-            if (t.DefaultFilter) {
-                val.DefaultFilter = t.DefaultFilter;
-            }
-
-            if (t.ListFilter) {
-                val.ListFilter = t.ListFilter;
+            for (const [key, value] of Object.entries(t)) {
+                if (key === "Schema" || key === "BackRelations") continue;
+                // @ts-ignore
+                // des passt schon so gell
+                if (value) val[key] = value;
             }
 
             val.Schema = MergeFields(val.Schema, t.Schema);

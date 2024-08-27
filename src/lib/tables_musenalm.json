@@ -1,6 +1,6 @@
 [
 	{
-		"Name": "Akteure",
+		"Name": "Agents",
 		"Schema": [
 			{
 				"Name": "Beruf",
@@ -25,28 +25,10 @@
 				"TVisibility": false,
 				"EVisibility": false
 			}
-		],
-		"BackRelations": [
-			{
-				"Name": "MA_Inhalte",
-				"Type": "BackRelationUnlimited",
-				"Options": {
-					"Table": "Inhalte",
-					"Field": [
-						"Geschaffen",
-						"Geschrieben",
-						"Gezeichnet",
-						"Gestochen"
-					],
-					"Expand": "Inhalte_via_Geschaffen.Band.Werk,Inhalte_via_Geschrieben.Band.Werk,Inhalte_via_Gezeichnet.Band.Werk,Inhalte_via_Gestochen.Band.Werk"
-				},
-				"Group": "Norm",
-				"THidden": true
-			}
 		]
 	},
 	{
-		"Name": "Orte",
+		"Name": "Places",
 		"Schema": [
 			{
 				"Name": "Fiktiv",
@@ -68,11 +50,12 @@
 		]
 	},
 	{
-		"Name": "Reihen",
+		"Name": "Serials",
 		"Schema": [
 			{
 				"Name": "Nachweis",
-				"Type": "Text"
+				"Type": "Text",
+				"Group": "Research"
 			},
 			{
 				"Name": "Musenalm_ID",
@@ -85,7 +68,7 @@
 		]
 	},
 	{
-		"Name": "Aufnahme",
+		"Name": "Entries",
 		"Schema": [
 			{
 				"Name": "Ortsangabe",
@@ -95,7 +78,7 @@
 				"TVisibility": false,
 				"Options": {
 					"Transcription": {
-						"For": "Ort"
+						"For": "Places"
 					}
 				}
 			},
@@ -113,7 +96,7 @@
 				"TVisibility": false,
 				"Options": {
 					"Transcription": {
-						"For": "Akteure"
+						"For": "Agents"
 					}
 				}
 			},
@@ -150,25 +133,11 @@
 					"MaxSelect": 3
 				}
 			}
-		],
-		"BackRelations": [
-			{
-				"Name": "Beitraege",
-				"Type": "BackRelationOne",
-				"Options": {
-					"Table": "Inhalte",
-					"Field": [
-						"Band"
-					]
-				},
-				"Group": "Norm",
-				"THidden": true
-			}
 		]
 	},
 	{
-		"Name": "Inhalte",
-		"Type": "Entries",
+		"Name": "Contents",
+		"Type": "Contents",
 		"Icon": "ri-article-line",
 		"ListRule": "",
 		"ViewRule": "",
@@ -176,51 +145,16 @@
 		"DeleteRule": "@request.auth.id != '' && (@request.auth.role = 'Admin' || @request.auth.role = 'Editor')",
 		"Schema": [
 			{
-				"Name": "Band",
-				"Group": "Main",
-				"Presentable": true,
-				"Required": true,
-				"Type": "RelationOne",
-				"Options": {
-					"Collection": "Aufnahme",
-					"MaxSelect": 1,
-					"Expand": "Band.Werk,Band.Sammlungen"
-				},
-				"Index": true
-			},
-			{
-				"Name": "Objektnummer",
-				"ShortName": "Obj.",
-				"Group": "Diff",
-				"Type": "Text",
-				"Required": true,
-				"Presentable": true,
-				"Index": true
-			},
-			{
-				"Name": "Titel",
-				"Type": "Text",
-				"Group": "Title",
-				"Index": true
-			},
-			{
 				"Name": "Urheberangabe",
 				"Type": "Text",
 				"ShortName": "Urheber",
 				"Index": true,
-				"Group": "Transcriptions"
-			},
-			{
-				"Name": "Incipit",
-				"Type": "Text",
-				"Index": true,
-				"Group": "Transcriptions"
-			},
-			{
-				"Name": "Seite",
-				"Index": true,
-				"Type": "Text",
-				"Group": "Transcriptions"
+				"Group": "Transcriptions",
+				"Options": {
+					"Transcription": {
+						"For": "Agents"
+					}
+				}
 			},
 			{
 				"Name": "Paginierung",
@@ -346,42 +280,6 @@
 					"Protected": false
 				},
 				"Group": "File"
-			},
-			{
-				"Name": "Geschaffen",
-				"Group": "Actors",
-				"Type": "RelationUnlimited",
-				"Options": {
-					"Collection": "Akteure"
-				},
-				"Index": true
-			},
-			{
-				"Name": "Geschrieben",
-				"Group": "Actors",
-				"Type": "RelationUnlimited",
-				"Options": {
-					"Collection": "Akteure"
-				},
-				"Index": true
-			},
-			{
-				"Name": "Gezeichnet",
-				"Group": "Actors",
-				"Type": "RelationUnlimited",
-				"Options": {
-					"Collection": "Akteure"
-				},
-				"Index": true
-			},
-			{
-				"Name": "Gestochen",
-				"Group": "Actors",
-				"Type": "RelationUnlimited",
-				"Options": {
-					"Collection": "Akteure"
-				},
-				"Index": true
 			}
 		]
 	}

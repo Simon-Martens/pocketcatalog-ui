@@ -4,8 +4,17 @@
 	import { loggedIn } from '$stores/pocketbase';
 	import { fly } from 'svelte/transition';
 	import { sineInOut } from 'svelte/easing';
+	import type { Collections } from '$stores/collections.svelte';
+	import CollectionDropdown from '$lib/components/menu/CollectionDropdown.svelte';
+
+	interface Props {
+		collections: Collections | undefined;
+	}
+
+	const { collections = $bindable() }: Props = $props();
 
 	let entries = Object.hasOwn(tables, 'Entries') ? tables['Entries'] : [];
+	let contents = Object.hasOwn(tables, 'Contents') ? tables['Contents'] : [];
 </script>
 
 <div class="flex flex-row gap-y-2 w-full border-b px-8 border-slate-300 bg-slate-100" class:border-b={$loggedIn}>
@@ -19,7 +28,17 @@
 					{:else}
 						<i class="ri-book-2-line"></i>
 					{/if}
-					<span class="">{entry.Name}</span>
+					<span class="">{entry.friendlyName ?? entry.Name}</span>
+				</a>
+			{/each}
+			{#each contents as content}
+				<a href="/entries/{content.Name}" aria-current={$page.url.pathname.toLowerCase().startsWith('/entries/' + content.Name.toLowerCase())}>
+					{#if content.Icon}
+						<i class={content.Icon}></i>
+					{:else}
+						<i class="ri-book-2-line"></i>
+					{/if}
+					<span class="">{content.friendlyName ?? content.Name}</span>
 				</a>
 			{/each}
 			<div class="grow"></div>
@@ -33,6 +52,9 @@
 				<i class="ri-map-pin-line"></i> <span class="name">Orte</span>
 			</a>
 		</nav>
+		<div class="mt-1.5 ml-4">
+			<CollectionDropdown {collections} />
+		</div>
 	{/if}
 </div>
 

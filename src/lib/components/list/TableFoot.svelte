@@ -1,19 +1,22 @@
 <script lang="ts">
-	import { createEventDispatcher, onMount } from 'svelte';
 	import * as Tooltip from '$lib/shacdn/components/ui/tooltip';
-	export let page: number;
-	export let totalPages: number;
-	export let total: number;
-	export let selected: number;
-	export let perPage: number;
-	export let filtered: boolean;
+	import type { RecordsList } from '$stores/records.svelte';
 
-	let Y: number;
-	let h: number;
+	interface Props {
+		records: RecordsList;
+		perPage: number;
+	}
 
-	$: filteractive = filtered;
+	const { records = $bindable(), perPage }: Props = $props();
 
-	let dispatch = createEventDispatcher();
+	let page: number = $derived(records.Page);
+	let totalPages: number = $derived(records.TotalPages);
+	let total: number = $derived(records.TotalItems);
+	let selected: number = $derived(records.Selected.length);
+	let filtered: boolean = $derived(records.Filter !== '');
+
+	let Y: number = $state(0);
+	let h: number = $state(0);
 </script>
 
 <svelte:window bind:scrollY={Y} bind:innerHeight={h} />
@@ -23,48 +26,48 @@
 	{:else}
 		Einträge
 	{/if} ausgewählt
-	<button
-		on:click|preventDefault={() => {
-			dispatch('resetselect');
-		}}
-		class="underline text-slate-600 hover:text-slate-900 decoration-dotted hover:decoration-solid">
-		Auswahl aufheben
-	</button>
-	<button
-		on:click|preventDefault={() => {
-			dispatch('deleteselected');
-		}}
-		class="inline-block ml-1 px-2 py-0.5 bg-red-200 text-red-600 hover:text-red-900 rounded hover:shadow-inner">
+	<!-- TODO: Mehrfachauswahl -->
+	<button onclick={() => {}} class="underline text-slate-600 hover:text-slate-900 decoration-dotted hover:decoration-solid"> Auswahl aufheben </button>
+	<!-- TODO: Implement deleting -->
+	<button onclick={() => {}} class="inline-block ml-1 px-2 py-0.5 bg-red-200 text-red-600 hover:text-red-900 rounded hover:shadow-inner">
 		<i class="ri-delete-bin-line"></i> löschen
 	</button> |
 {/if}
 
-{#if filteractive}
-	<button
-		on:click|preventDefault={() => {
-			dispatch('resetfilter');
-		}}
-		class="inline-block px-2 bg-orange-200 text-orange-700 hover:text-orange-900 rounded hover:shadow-inner">
+{#if filtered}
+	<!-- TODO: Implement filter -->
+	<button onclick={() => {}} class="inline-block px-2 bg-orange-200 text-orange-700 hover:text-orange-900 rounded hover:shadow-inner">
 		<i class="ri-filter-off-line"></i> Filter zurücksetzen
 	</button> |
 {/if}
 
 <span class="inline-block py-0.5">
 	{#if page !== totalPages && totalPages !== 0}
-		<em>{page * perPage}</em>&thinsp;/&thinsp;<em>{total}</em> Einträge |
-		<button
-			on:click|preventDefault={() => {
-				dispatch('npage');
-			}}
-			class="underline text-slate-600 hover:text-slate-900 decoration-dotted hover:decoration-solid">
-			Mehr anzeigen
-		</button>
+		<em>{page * perPage}</em>&thinsp;/&thinsp;<em>{total}</em> Einträge
+		<Tooltip.Root>
+			<Tooltip.Trigger>
+				<input type="checkbox" bind:checked={records.Selectable} class="!mx-1 w-4 h-4 !my-1 justify-center items-center text-center accent-black shadow-none" />
+			</Tooltip.Trigger>
+			<Tooltip.Content side="bottom">
+				<p class="text-base">Mehrfachauswahl</p>
+			</Tooltip.Content>
+		</Tooltip.Root>
+		|
+		<button onclick={() => records.Next()} class="underline text-slate-600 hover:text-slate-900 decoration-dotted hover:decoration-solid"> Mehr anzeigen </button>
 	{:else if total > 0}
 		<em>{total}</em>
 		{#if total === 1}
 			Eintrag
 		{:else}
 			Einträge
+			<Tooltip.Root>
+				<Tooltip.Trigger>
+					<input type="checkbox" bind:checked={records.Selectable} class="!mx-1 w-4 h-4 !my-1 justify-center items-center text-center accent-black shadow-none" />
+				</Tooltip.Trigger>
+				<Tooltip.Content side="bottom">
+					<p class="text-base">Mehrfachauswahl</p>
+				</Tooltip.Content>
+			</Tooltip.Root>
 		{/if}
 	{:else}
 		Keine Einträge gefunden
@@ -73,7 +76,7 @@
 		<Tooltip.Root closeDelay={0}>
 			<Tooltip.Trigger>
 				<button
-					on:click|preventDefault={() => {
+					onclick={() => {
 						window.scrollTo({ top: 0, behavior: 'smooth' });
 					}}
 					class="underline text-slate-600 hover:text-slate-900 decoration-dotted hover:decoration-solid">
@@ -86,7 +89,7 @@
 		<Tooltip.Root closeDelay={0}>
 			<Tooltip.Trigger>
 				<button
-					on:click|preventDefault={() => {
+					onclick={() => {
 						window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
 					}}
 					class="underline text-slate-600 hover:text-slate-900 decoration-dotted hover:decoration-solid">
