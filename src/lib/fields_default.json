@@ -87,7 +87,7 @@
 	},
 	{
 		"Name": "State",
-		"Type": "Select",
+		"Type": "SelectOne",
 		"Group": "State",
 		"THidden": true,
 		"TVisibility": false,

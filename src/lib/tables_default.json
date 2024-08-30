@@ -14,7 +14,8 @@
 			{
 				"Name": "Name",
 				"Type": "Text",
-				"Group": "Main",
+				"Group": "Name",
+				"Presentation": "Main",
 				"Required": true,
 				"Presentable": true,
 				"Index": true
@@ -22,7 +23,8 @@
 			{
 				"Name": "Collective",
 				"friendlyName": "Körperschaft",
-				"Group": "MainSymbol",
+				"Group": "Symbol",
+				"Presentation": "MainSymbol",
 				"Type": "Boolean",
 				"Presentable": true
 			},
@@ -30,6 +32,7 @@
 				"Name": "Life",
 				"friendlyName": "Lebensdaten",
 				"Group": "Diff",
+				"Presentation": "Diff",
 				"Type": "Text",
 				"Index": true,
 				"Presentable": true
@@ -120,7 +123,8 @@
 				"Name": "Title",
 				"friendlyName": "Titel",
 				"Type": "Text",
-				"Group": "Main",
+				"Group": "Name",
+				"Presentation": "Main",
 				"Required": true,
 				"Presentable": true,
 				"Index": true
@@ -163,7 +167,8 @@
 			{
 				"Name": "Name",
 				"Type": "Text",
-				"Group": "Main",
+				"Group": "Name",
+				"Presentation": "Main",
 				"Required": true,
 				"Presentable": true,
 				"Index": true
@@ -203,7 +208,8 @@
 			{
 				"Name": "Name",
 				"Type": "Text",
-				"Group": "Main",
+				"Group": "Name",
+				"Presentation": "Main",
 				"Required": true,
 				"Index": true,
 				"Presentable": true
@@ -211,7 +217,8 @@
 			{
 				"Name": "Icon",
 				"Type": "Text",
-				"Group": "MainSymbol",
+				"Group": "Symbol",
+				"Presentation": "MainSymbol",
 				"Required": true
 			},
 			{
@@ -248,7 +255,8 @@
 			{
 				"Name": "PreferredTitle",
 				"Type": "Text",
-				"Group": "Main",
+				"Group": "Name",
+				"Presentation": "Main",
 				"friendlyNameEN": "Prefferred Title",
 				"friendlyName": "Bevorzugter Titel",
 				"Required": true,
@@ -257,7 +265,8 @@
 			},
 			{
 				"Name": "Creator",
-				"Group": "Diff",
+				"Group": "Agents",
+				"Presentation": "Diff",
 				"friendlyName": "Geistiger Schöpfer",
 				"Presentable": true,
 				"Required": false,
@@ -312,16 +321,19 @@
 				"Name": "Template",
 				"Group": "Template",
 				"Required": false,
+				"Presentation": "MainSymbol",
 				"Type": "RelationOne",
 				"Options": {
 					"Collection": "__Templates",
 					"MaxSelect": 1
-				}
+				},
+				"THidden": true
 			},
 			{
 				"Name": "Work",
-				"friendlyName": "Werk",
-				"Group": "Main",
+				"friendlyName": "Bevorzugter Titel",
+				"Group": "Works",
+				"Presentation": "Main",
 				"Presentable": true,
 				"Required": false,
 				"Type": "RelationOne",
@@ -376,7 +388,7 @@
 			},
 			{
 				"Name": "Date",
-				"friendyName": "Datum",
+				"friendlyName": "Datum",
 				"Type": "Number",
 				"Group": "Date"
 			},
@@ -401,14 +413,14 @@
 				"Name": "Extend",
 				"friendlyName": "Umfang",
 				"Type": "Text",
-				"Group": "Extend",
-				"TVisibility": false
+				"Group": "Extend"
 			},
 			{
 				"Name": "Dimensions",
 				"friendlyName": "Maße",
 				"Type": "Text",
-				"Group": "MediaSpecific"
+				"Group": "MediaSpecific",
+				"TVisibility": false
 			},
 			{
 				"Name": "Language",
@@ -749,6 +761,7 @@
 				"friendlyName": "Stichworte",
 				"Group": "Tag",
 				"Type": "JsonArray",
+				"TVisibility": false,
 				"Options": {
 					"MaxSize": 4096000,
 					"Schema": {
@@ -767,6 +780,7 @@
 		"BackRelations": [
 			{
 				"Name": "Agents",
+				"friendlyName": "Akteure",
 				"Type": "BackRelationNM",
 				"Options": {
 					"Table": "__Entries_Agents",
@@ -779,6 +793,7 @@
 			},
 			{
 				"Name": "Serials",
+				"friendlyName": "Reihen",
 				"Type": "BackRelationNM",
 				"Options": {
 					"Table": "__Entries_Serials",
@@ -831,6 +846,7 @@
 			{
 				"Name": "Entry",
 				"Group": "Entries",
+				"Presentation": "FromWhere",
 				"Presentable": true,
 				"Index": true,
 				"Required": true,
@@ -844,6 +860,8 @@
 				"Name": "Relation",
 				"Group": "Relation",
 				"Type": "SelectOne",
+				"Presentation": "Relation",
+				"DefaultRelation": "Bevorzugter Reihentitel",
 				"Presentable": true,
 				"Required": true,
 				"Options": {
@@ -859,6 +877,7 @@
 			},
 			{
 				"Name": "Serial",
+				"Presentation": "FromWhere",
 				"Group": "Serials",
 				"Index": true,
 				"Presentable": true,
@@ -871,6 +890,7 @@
 			},
 			{
 				"Name": "Number",
+				"Presentation": "Diff",
 				"friendlyName": "Zählung innerhalb der Reihe",
 				"Group": "Count",
 				"Required": false,
@@ -891,6 +911,7 @@
 			{
 				"Name": "Entry",
 				"Group": "Entries",
+				"Presentation": "FromWhere",
 				"Presentable": true,
 				"Required": true,
 				"Index": true,
@@ -903,6 +924,7 @@
 			{
 				"Name": "Relation",
 				"Group": "Relation",
+				"Presentation": "Relation",
 				"Type": "SelectOne",
 				"Presentable": true,
 				"Required": true,
@@ -931,6 +953,7 @@
 			{
 				"Name": "Agent",
 				"Group": "Agents",
+				"Presentation": "FromWhere",
 				"Presentable": true,
 				"Required": false,
 				"Index": true,
@@ -968,6 +991,7 @@
 				"Name": "Entry",
 				"Group": "Entries",
 				"friendlyName": "Aufnahme",
+				"Presentation": "FromWhere",
 				"Presentable": true,
 				"Required": true,
 				"Index": true,
@@ -980,6 +1004,7 @@
 			{
 				"Name": "Mark",
 				"friendlyName": "Signatur",
+				"Presentation": "Main",
 				"Type": "Text",
 				"Index": true,
 				"Presentable": true,
@@ -993,6 +1018,7 @@
 			},
 			{
 				"Name": "Location",
+				"Presentation": "Diff",
 				"friendlyName": "Standort",
 				"Type": "Text",
 				"Presentable": true,
@@ -1091,7 +1117,8 @@
 			{
 				"Name": "Entry",
 				"friendlyName": "Aufnahme",
-				"Group": "Main",
+				"Pesentation": "FromWhere",
+				"Group": "Entries",
 				"Presentable": true,
 				"Required": true,
 				"Index": true,
@@ -1160,6 +1187,7 @@
 		"Schema": [
 			{
 				"Name": "Content",
+				"Presentation": "FromWhere",
 				"Group": "Contents",
 				"Presentable": true,
 				"Required": true,
@@ -1172,6 +1200,7 @@
 			},
 			{
 				"Name": "Relation",
+				"Presentation": "Relation",
 				"Group": "Relation",
 				"Type": "SelectOne",
 				"Presentable": true,
@@ -1201,6 +1230,7 @@
 			{
 				"Name": "Agent",
 				"Group": "Agents",
+				"Presentation": "FromWhere",
 				"Presentable": true,
 				"Required": false,
 				"Index": true,

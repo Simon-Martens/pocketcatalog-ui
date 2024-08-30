@@ -1,8 +1,7 @@
-import type { Group, Table, ViewGroup, ViewGroupResult } from "$lib/newtypes";
+import type { Group, Schema, Table, ViewGroup, ViewGroupResult } from "$lib/newtypes";
 import { type RecordModel } from "pocketbase";
 
 import { api } from "./pocketbase";
-import { GetDefaultSort } from "./schema";
 
 // This is all the Meta Groups, into which fields can be grouped
 export const ViewGroups: ViewGroup[] = [
@@ -49,8 +48,7 @@ export const ViewGroups: ViewGroup[] = [
         "Groups": ["Identifier", "Research", "Description", "Collections", "Tag", "EditorNotes"]
     },
     {
-        "Name": "Other Fields",
-        "friendlyName": "Andere Felder",
+        "Name": "Rest",
         "Groups": ["URL", "File", "Deprecated"],
         "NeverGroup": true
     },
@@ -76,30 +74,31 @@ export class RecordsList {
 
     // We give out the grouping for the visible groups once here, so we don't have
     // to iterate over all fields or the visible array for every single table cell.
-    // VisibleGroups depends on Visible and Grouped and will rerun on every change.
     Visible = $state<string[]>([]);
     Grouped = $state<string[]>(["Title Data"]);
     VisibleGroups = $derived.by(() => {
-        let vg: ViewGroupResult[] = [];
+        let vg: Record<number, { [FieldType in Group]: Schema[] }> = {}
+        let i = 0;
         for (let mg of this.YieldGroups()) {
-            let ret: ViewGroupResult | null = null;
-            for (const [n, g] of Object.entries(mg.Fields)) {
-                let show = [];
-                for (const f of g) {
-                    if (this.Visible.indexOf(f.Name) !== -1)
-                        show.push(f);
-                }
-                if (show.length) {
-                    if (!ret) ret = { Group: mg.Group, Fields: {} };
-                    ret.Fields[n as Group] = show;
+            if (mg.Showable) {
+                for (const [k, v] of Object.entries(mg.Showable)) {
+                    for (const f of v) {
+                        if (this.Visible.indexOf(f.Name) !== -1) {
+                            if (!Object.hasOwn(vg, i)) {
+                                //@ts-ignore surely it's fine nothing can ever go wrong here
+                                vg[i] = {};
+                            }
+                            if (!Object.hasOwn(vg[i], k)) {
+                                vg[i][k as Group] = [];
+                            }
+                            vg[i][k as Group].push(f);
+                        }
+                    }
                 }
             }
-            if (ret) {
-                if (mg.Group < ViewGroups.length && this.Grouped.indexOf(ViewGroups[mg.Group].Name) !== -1)
-                    ret.Grouped = true;
-                vg.push(ret);
-            }
+            i++;
         }
+        console.log(vg);
         return vg;
     });
 
@@ -110,9 +109,10 @@ export class RecordsList {
     #scheme: Table;
     #perpage: number;
     #permanentFilter: string = "";
-    #collection: string = "";
 
     constructor(scheme: Table, perPage: number = 120, listFilter: boolean = true) {
+        console.log("constructed with:");
+        console.log(scheme);
         this.#scheme = scheme;
         this.#perpage = perPage;
         this.#expand = this.#Expand();
@@ -135,7 +135,15 @@ export class RecordsList {
             return;
         }
 
-        this.Sort = GetDefaultSort(this.#scheme.Name, this.#scheme.Name);
+        if (this.#scheme.Fields && this.#scheme.Fields.Main) {
+            for (const f of this.#scheme.Fields.Main)
+                this.Sort.push(f.Name);
+        }
+
+        if (this.#scheme.Fields && this.#scheme.Fields.Diff) {
+            for (const f of this.#scheme.Fields.Diff)
+                this.Sort.push(f.Name)
+        }
     }
 
     DefaultFilter() {
@@ -156,11 +164,12 @@ export class RecordsList {
     }
 
     // System & Some other Fields are not yielded here
+    // TODO: Do not modify the const!
     * YieldGroups(): Generator<ViewGroupResult> {
         if (!this.#scheme.Fields) return;
         let i = 0;
         for (const mg of ViewGroups) {
-            let ret: ViewGroupResult | null = null;
+            let ret: ViewGroupResult = null;
             for (const mgg of mg.Groups) {
                 let show = [];
                 if (Object.hasOwn(this.#scheme.Fields, mgg)) {
@@ -170,12 +179,15 @@ export class RecordsList {
                     }
                 }
                 if (show.length) {
-                    if (!ret) ret = { Group: i, Fields: {} };
-                    ret.Fields[mgg as Group] = show;
+                    if (!ret) ret = {
+                        Group: i,
+                        Fields: []
+                    };
+                    ret[mgg as Group] = show;
                 }
             }
             i++;
-            if (ret) yield ret;
+            if (ret) yield;
         }
     }
 
@@ -203,12 +215,6 @@ export class RecordsList {
         }
     }
 
-
-    SetCollection(id: string) {
-        this.#collection = id;
-        this.Refresh();
-    }
-
     #InvertSort(name: string) {
         if (name.startsWith('-')) {
             return name.substring(1, name.length);
@@ -231,7 +237,6 @@ export class RecordsList {
             .then(() => this.Refreshing = false);
     }
 
-    // TODO: Indirect fetch. (Beiträge over Aufnahmen, Aufnahmen over Sammlung)
     async Fetch() {
         this.Loading = true;
         return this.#InternalFetch(this.#perpage, this.Page, this.Filter, this.Sort)
@@ -245,11 +250,6 @@ export class RecordsList {
         if (filter) {
             if (f) f = f + " && ";
             f = f + filter;
-        }
-
-        if (this.#collection) {
-            if (f) f = f + " && ";
-            f = f + "Collections?~'" + this.#collection + "'";
         }
 
         return api.collection(this.#scheme.Name)

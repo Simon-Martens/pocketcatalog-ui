@@ -1,7 +1,10 @@
 import type { RecordModel } from 'pocketbase';
 
-export type Group = "Main" | "Serials" | "Items" | "MainSymbol" | "Diff" | "Entries" | "Works" | "Places" | "Collections" | "Description" | "Schema" | "Template" | "Order" | "Count" | "Parent" | "Title" | "Date" | "Issue" | "MediaSpecific" | "MediaMeta" | "Tag" | "Agents" | "Children" | "Relation" | "Transcriptions" | "Identifier" | "URL" | "Contents" | "Research" | "Deprecated" | "EditorNotes" | "Annotations" | "FieldMetaData" | "Fields" | "State" | "" | "None" | "Extend";
-export type Type = "Text" | "Editor" | "SelectOne" | "SelectUnlimited" | "Json" | "Boolean" | "JsonArrayFixedKeys" | "RelationUnlimited" | "JsonFixedKeys" | "JsonMap" | "RelationOne" | "BackRelationUnlimited" | "BackRelationNM" | "BackRelationOne" | "JsonArrayFields";
+export type Group = "Serials" | "Items" | "Symbol" | "Diff" | "Entries" | "Works" | "Places" | "Collections" | "Description" | "Schema" | "Template" | "Order" | "Count" | "Parent" | "Title" | "Date" | "Issue" | "MediaSpecific" | "MediaMeta" | "Tag" | "Agents" | "Children" | "Relation" | "Transcriptions" | "Identifier" | "URL" | "Contents" | "Research" | "Deprecated" | "EditorNotes" | "Annotations" | "FieldMetaData" | "Fields" | "State" | "" | "None" | "Extend" | "Name" | "File";
+
+export type Type = "Text" | "Editor" | "SelectOne" | "SelectUnlimited" | "Json" | "Boolean" | "JsonArrayFixedKeys" | "RelationUnlimited" | "JsonFixedKeys" | "JsonMap" | "RelationOne" | "BackRelationUnlimited" | "BackRelationNM" | "BackRelationOne" | "JsonArrayFields" | "Number";
+
+export type Presentation = "Main" | "Diff" | "MainSymbol" | "FromWhere" | "Relation";
 
 export type Bearbeitungsstatus = "Unbekannt" | "Gesichtet" | "In Bearbeitung" | "Rückmeldung" | "Erfasst" | "Überprüfen" | "";
 
@@ -18,52 +21,12 @@ export interface Table {
     CreateRule?: string;
     DeleteRule?: string;
     NoDefaults?: boolean;
-    Fields?: FieldList;
+    Fields?: { [FieldType in Group]: Schema[] };
     Type?: TableType;
     Icon?: string;
     DefaultFilter?: string;
     DefaultSort?: string[];
     ListFilter?: string;
-}
-
-export interface FieldList {
-    Main: Schema[];
-    MainSymbol?: Schema[];
-    Diff?: Schema[];
-    Entries?: Schema[];
-    Works?: Schema[];
-    Places?: Schema[];
-    Collections?: Schema[];
-    Description?: Schema[];
-    Schema?: Schema[];
-    Template?: Schema[];
-    Order?: Schema[];
-    Count?: Schema[];
-    Parent?: Schema[];
-    Title?: Schema[];
-    Date?: Schema[];
-    Items?: Schema[];
-    Serials?: Schema[];
-    Issue?: Schema[];
-    MediaSpecific?: Schema[];
-    MediaMeta?: Schema[];
-    Tag?: Schema[];
-    Agents?: Schema[];
-    Children?: Schema[];
-    Relation?: Schema[];
-    Transcriptions?: Schema[];
-    Identifier?: Schema[];
-    URL?: Schema[];
-    Contents?: Schema[];
-    Research?: Schema[];
-    Deprecated?: Schema[];
-    EditorNotes?: Schema[];
-    Annotations?: Schema[];
-    FieldMetaData?: Schema[];
-    Fields?: Schema[];
-    State?: Schema[];
-    None?: Schema[];
-    Extend?: Schema[];
 }
 
 export interface Schema {
@@ -84,6 +47,7 @@ export interface Schema {
     EHidden?: boolean;
     Default?: string;
     Or?: string;
+    Presentation?: Presentation;
 }
 export interface Options {
     Transcription?: Transcription;
@@ -115,4 +79,21 @@ export interface Entity extends RecordModel {
 export interface Collection extends RecordModel {
     Name: string;
     Description?: string;
+}
+
+export interface ViewGroup {
+    Name: string;
+    friendlyName?: string;
+    Groups: Group[];
+    NeverGroup?: boolean;
+    Showable?: { [FieldType in Group]: Schema[] };
+}
+type ObjectPropertiesOptional<T> = (
+    Partial<T> & { [K in keyof T as T[K] extends object ? never : K]: T[K] }
+) extends infer O ? { [K in keyof O]: O[K] } : never;
+
+export interface ViewGroupResult {
+    Group: number;
+    Fields: ObjectPropertiesOptional<{ [FieldType in Group]: Schema[] }>;
+    Grouped?: boolean;
 }

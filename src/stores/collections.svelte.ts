@@ -1,15 +1,16 @@
 import { tables } from "./schema";
 import type { Table, Collection } from "$lib/newtypes";
 import { api } from "./pocketbase";
+import { writable } from "svelte/store";
 
 export class Collections {
     List = $state<null | Collection[]>(null);
     TotalItems = $derived(this.List ? this.List.length : 0);
     Loading = $state(false);
 
-    Selected = $state<null | Collection>(null);
+    Selected = writable("");
 
-    #scheme: Table | null
+    #scheme: Table | null;
 
     constructor() {
         if (tables["Collections"] && tables["Collections"].length)
@@ -33,6 +34,4 @@ export class Collections {
                 this.Loading = false;
             });
     }
-
-
 }

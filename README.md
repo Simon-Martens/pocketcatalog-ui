@@ -55,4 +55,7 @@ Einschränkungen:
 
 TODO: 
 - Keine Backrelations bei Werken und Sammlungen
+- Stichworte (zzt. augeblendet)
+- Templates (zzt. ausgeblendet)
 
+- Sammlung: Unzugeordnet

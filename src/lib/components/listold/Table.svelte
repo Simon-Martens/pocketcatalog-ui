@@ -2,7 +2,7 @@
 	import type { Table } from '$lib/newtypes';
 	import TableHead from './TableHead.svelte';
 	import TableRow from './TableRow.svelte';
-	import type { ListResult, RecordModel } from 'pocketbase';
+	import type { RecordModel } from 'pocketbase';
 
 	export let schema: Table;
 	export let sort: string[];

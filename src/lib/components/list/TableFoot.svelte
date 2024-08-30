@@ -7,12 +7,11 @@
 		perPage: number;
 	}
 
-	const { records = $bindable(), perPage }: Props = $props();
+	const { records, perPage }: Props = $props();
 
 	let page: number = $derived(records.Page);
 	let totalPages: number = $derived(records.TotalPages);
 	let total: number = $derived(records.TotalItems);
-	let selected: number = $derived(records.Selected.length);
 	let filtered: boolean = $derived(records.Filter !== '');
 
 	let Y: number = $state(0);
@@ -20,20 +19,33 @@
 </script>
 
 <svelte:window bind:scrollY={Y} bind:innerHeight={h} />
-{#if selected > 0}
-	<em>{selected} </em>{#if selected === 1}
+{#if records.Selected.length > 0 && records.Selectable}
+	<em>{records.Selected.length} </em>
+	{#if records.Selected.length === 1}
 		Eintrag
 	{:else}
 		Einträge
 	{/if} ausgewählt
 	<!-- TODO: Mehrfachauswahl -->
-	<button onclick={() => {}} class="underline text-slate-600 hover:text-slate-900 decoration-dotted hover:decoration-solid"> Auswahl aufheben </button>
+	<button
+		onclick={() => {
+			records.Selected = [];
+		}}
+		class="underline text-slate-600 hover:text-slate-900 decoration-dotted hover:decoration-solid">aufheben</button>
 	<!-- TODO: Implement deleting -->
 	<button onclick={() => {}} class="inline-block ml-1 px-2 py-0.5 bg-red-200 text-red-600 hover:text-red-900 rounded hover:shadow-inner">
 		<i class="ri-delete-bin-line"></i> löschen
-	</button> |
+	</button>
 {/if}
 
+<Tooltip.Root>
+	<Tooltip.Trigger>
+		<input type="checkbox" bind:checked={records.Selectable} class="!mx-1 w-4 h-4 !my-1 justify-center items-center text-center accent-black shadow-none" />
+	</Tooltip.Trigger>
+	<Tooltip.Content side="bottom">
+		<p class="text-base">Mehrfachauswahl</p>
+	</Tooltip.Content>
+</Tooltip.Root> |
 {#if filtered}
 	<!-- TODO: Implement filter -->
 	<button onclick={() => {}} class="inline-block px-2 bg-orange-200 text-orange-700 hover:text-orange-900 rounded hover:shadow-inner">
@@ -43,16 +55,7 @@
 
 <span class="inline-block py-0.5">
 	{#if page !== totalPages && totalPages !== 0}
-		<em>{page * perPage}</em>&thinsp;/&thinsp;<em>{total}</em> Einträge
-		<Tooltip.Root>
-			<Tooltip.Trigger>
-				<input type="checkbox" bind:checked={records.Selectable} class="!mx-1 w-4 h-4 !my-1 justify-center items-center text-center accent-black shadow-none" />
-			</Tooltip.Trigger>
-			<Tooltip.Content side="bottom">
-				<p class="text-base">Mehrfachauswahl</p>
-			</Tooltip.Content>
-		</Tooltip.Root>
-		|
+		<em>{page * perPage}</em>&thinsp;/&thinsp;<em>{total}</em> Einträge |
 		<button onclick={() => records.Next()} class="underline text-slate-600 hover:text-slate-900 decoration-dotted hover:decoration-solid"> Mehr anzeigen </button>
 	{:else if total > 0}
 		<em>{total}</em>
@@ -60,14 +63,6 @@
 			Eintrag
 		{:else}
 			Einträge
-			<Tooltip.Root>
-				<Tooltip.Trigger>
-					<input type="checkbox" bind:checked={records.Selectable} class="!mx-1 w-4 h-4 !my-1 justify-center items-center text-center accent-black shadow-none" />
-				</Tooltip.Trigger>
-				<Tooltip.Content side="bottom">
-					<p class="text-base">Mehrfachauswahl</p>
-				</Tooltip.Content>
-			</Tooltip.Root>
 		{/if}
 	{:else}
 		Keine Einträge gefunden

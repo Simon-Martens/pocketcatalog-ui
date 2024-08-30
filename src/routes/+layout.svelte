@@ -18,5 +18,5 @@
 </div>
 
 <svelte:head>
-	<meta http-equiv="Content-Security-Policy" content="default-src 'self' {PUBLIC_PB_API}" />
+	<meta http-equiv="Content-Security-Policy" content="default-src 'self' {PUBLIC_PB_API} style-src 'self' 'unsafe-inline'" />
 </svelte:head>

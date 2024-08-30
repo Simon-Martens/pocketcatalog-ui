@@ -1,21 +1,20 @@
 import fields_def from '$lib/fields_default.json';
 import tables_def from '$lib/tables_default.json';
 import tables_mus from '$lib/tables_musenalm.json';
-import type { FieldList, Schema, Table } from '$lib/newtypes';
+import type { Schema, Table } from '$lib/newtypes';
 
 export const tables = GetMergeTypes(tables_mus as Table[], tables_def as Table[], fields_def as Schema[]);
-console.log(tables);
 
 function GetMergeTypes(table_mus: Table[], table_def: Table[], val_def: Schema[]) {
     let c = MergeCollection(table_mus, table_def);
 
-    for (const [_, values] of Object.entries(c)) {
+    for (const values of Object.values(c)) {
         for (const value of values) {
             if (!value.NoDefaults) {
                 value.Schema = MergeFields(value.Schema, val_def)
             }
 
-            let l: FieldList = {};
+            let l = {};
             // WARNING: We do not use copies of the Schema objects, but the objects themselves here. Change if mutated!
             for (const f of value.Schema) {
                 let g = f.Group;
@@ -39,7 +38,7 @@ function GetMergeTypes(table_mus: Table[], table_def: Table[], val_def: Schema[]
                     // @ts-ignore
                     l[g].push(f);
                 }
-
+            // @ts-ignore
             value.Fields = l;
         }
     }
@@ -109,4 +108,27 @@ function MergeFields(fields1: Schema[], fields2: Schema[]) {
     }
 
     return Object.values(map);
+}
+
+// WARNING: this is recursive and depends on external data so it has potentially infinite oopise woopsies
+export function GetDefaultSort(name: string, fromwhere: string) {
+    if (!tables) return [];
+    let table = Object.values(tables).flat().find((x) => x.Name === name);
+    if (!table || !table.Fields) return [];
+    let main: string[] = [];
+    let diff: string[] = [];
+    let foreign: string[] = [];
+    for (const [_, g] of Object.entries(table.Fields)) {
+        for (const f of g) {
+            if (f.Presentation === "Main") main.push(f.Name);
+            if (f.Presentation === "Diff") diff.push(f.Name);
+            if (f.Presentation === "FromWhere" && f.Options && f.Options.Table && fromwhere !== f.Options.Table)
+                foreign = GetDefaultSort(f?.Options?.Table, name).map((x) => f?.Options?.Table + "." + x);
+
+        }
+    }
+
+    main.push(...foreign);
+    main.push(...diff);
+    return main;
 }

@@ -2,7 +2,7 @@
 	import EntryTable from '$lib/components/list/EntryTable.svelte';
 	import { RecordsList } from '$stores/records.svelte';
 	import EntryMenu from '$lib/components/list/EntryMenu.svelte';
-	import type { Table } from '$lib/newtypes.js';
+	import type { Collection, Table } from '$lib/newtypes.js';
 	import { getContext } from 'svelte';
 	import type { Collections } from '$stores/collections.svelte.js';
 
@@ -10,23 +10,32 @@
 	const { data } = $props();
 	const collections: Collections = getContext('collections');
 
-	// this data is initialized and bound in the data table
-	let selectable: boolean = $state(false);
-
 	// this is not reactive, and doesn't react to changes in the scheme
 	// if we derive this from scheme; but also we can't change state from
 	// the derived value. It's fucked.
 	let records: RecordsList = $derived(data.records);
 	let scheme: Table = $derived(data.scheme);
+
+	let collection: null | Collection = $state(null);
+
+	if (collections) {
+		collections.Selected.subscribe((x) => {
+			if (!collections.List) {
+				collection = null;
+				return;
+			}
+			collection = collections.List.find((y) => y.id === x) ?? null;
+
+			records.SetCollection(x);
+		});
+	}
 </script>
 
-{#key collections.Selected}
-	<EntryMenu {records} {scheme} perPage={data.perPage} />
+<EntryMenu {collection} {records} {scheme} perPage={data.perPage} />
 
-	<div class="px-4">
-		<EntryTable {scheme} {records} bind:selectable />
-	</div>
-{/key}
+<div class="px-4">
+	<EntryTable {scheme} {records} />
+</div>
 
 <style>
 	@keyframes refresh {

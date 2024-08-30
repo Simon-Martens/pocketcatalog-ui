@@ -33,7 +33,9 @@
 		tick().then(() => {
 			document.getElementById(triggerId)?.focus();
 		});
-		if (collections?.List) collections.Selected = collections.List.find((s) => s.id == value) ?? null;
+		if (collections?.List) {
+			collections.Selected.set(value);
+		}
 	}
 </script>
 

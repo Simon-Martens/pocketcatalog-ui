@@ -1,22 +1,43 @@
 <script lang="ts">
-	import type { Table } from '$lib/newtypes';
+	import type { Collection, Table } from '$lib/newtypes';
 	import type { RecordsList } from '$stores/records.svelte';
 	import * as Tooltip from '$lib/shacdn/components/ui/tooltip';
 	import TableFoot from '$lib/components/list/TableFoot.svelte';
 	import TableViewOptions from './TableViewOptions.svelte';
+	import { onMount, tick } from 'svelte';
+	import type { Collections } from '$stores/collections.svelte';
 
 	interface Props {
 		perPage: number;
 		scheme: Table;
 		records: RecordsList;
+		collection: Collection | null;
 	}
+	const { perPage, scheme, records = $bindable(), collection = $bindable() }: Props = $props();
 
-	const { perPage, scheme, records = $bindable() }: Props = $props();
+	let el: HTMLDivElement;
+	let pinned = $state(false);
+	const observer = new IntersectionObserver(
+		([e]) => {
+			if (e.intersectionRatio < 1) {
+				pinned = true;
+			} else {
+				pinned = false;
+			}
+		},
+		{ threshold: [1] }
+	);
+
+	onMount(() => {
+		observer.observe(el);
+	});
 </script>
 
-<div class="px-8 py-2.5 border-b bg-slate-50 flex flex-row sticky top-0 gap-x-1">
+<div class="px-8 py-2.5 border-b bg-slate-50 flex flex-row sticky -top-[1px] gap-x-1 transition-all duration-100" bind:this={el} class:is-pinned={pinned}>
 	<h2 class="text-slate-500 py-0.5">
-		<span class="">Sammlungen&nbsp;&middot;&nbsp;</span><span class="text-slate-900 font-bold">{scheme.friendlyName ?? scheme.Name}</span>
+		<span class=""
+			>{#if !collection}Alle Sammlungen{:else}{collection.Name}{/if}&nbsp;&middot;&nbsp;</span>
+		<span class="text-slate-900 font-bold">{scheme.friendlyName ?? scheme.Name}</span>
 	</h2>
 	<Tooltip.Root>
 		<Tooltip.Trigger>
@@ -36,7 +57,6 @@
 		{#if records.Loading || records.Refreshing || !records.List}
 			<i class="ri-hourglass-2-fill inline-block align-middle !text-base refreshing-infinite"></i>
 		{:else}
-			<!-- TODO: selected -->
 			<TableFoot {records} {perPage} />
 		{/if}
 	</div>
@@ -58,5 +78,9 @@
 
 	i {
 		display: inline-block;
+	}
+
+	.is-pinned {
+		@apply shadow;
 	}
 </style>
