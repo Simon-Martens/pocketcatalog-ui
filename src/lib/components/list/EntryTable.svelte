@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { RecordsList, ViewGroups } from '$stores/records.svelte';
 	import type { Table } from '$lib/newtypes';
+	import EntryListDecider from './EntryListDecider.svelte';
 
 	interface Props {
 		records: RecordsList;
@@ -44,14 +45,16 @@
 								<td>
 									{#each Object.entries(mg.Fields) as [n, g] (n)}
 										{#each g as f (f.Name)}
-											<div>{e[f.Name]}</div>
+											<EntryListDecider M={e} F={f} T={scheme} G={false} />
 										{/each}
 									{/each}
 								</td>
 							{:else}
 								{#each Object.entries(mg.Fields) as [n, g] (n)}
 									{#each g as f (f.Name)}
-										<td>{e[f.Name]}</td>
+										<td>
+											<EntryListDecider M={e} F={f} T={scheme} G={false} />
+										</td>
 									{/each}
 								{/each}
 							{/if}

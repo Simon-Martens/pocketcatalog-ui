@@ -11,3 +11,7 @@
 
 	const { M, T, F, G }: Props = $props();
 </script>
+
+<div class="">
+	{M[F.Name]}
+</div>

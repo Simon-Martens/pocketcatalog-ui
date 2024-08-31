@@ -60,17 +60,19 @@
 				{#each records.YieldGroups() as mg (mg.Group)}
 					<div class="flex flex-row gap-x-3 mb-1 [&:not(:first-child)]:mt-1 [&:first-child]:pt-2 py-1 border-b mx-2">
 						<div class="grow font-bold">{ViewGroups[mg.Group].friendlyName ?? ViewGroups[mg.Group].Name}</div>
-						<Tooltip.Root openDelay={1000} disableHoverableContent={true}>
-							<div class="justify-self-end">
-								<Tooltip.Trigger>
-									<i class="ri-list-view"></i>
-									<input type="checkbox" class="!mx-1 w-4 h-4 !my-1 justify-center items-center text-center accent-black shadow-none" id={ViewGroups[mg.Group].Name} value={ViewGroups[mg.Group].Name} bind:group={records.Grouped} />
-								</Tooltip.Trigger>
-								<Tooltip.Content side="bottom">
-									<p class="text-base">Spalten gruppieren</p>
-								</Tooltip.Content>
-							</div>
-						</Tooltip.Root>
+						{#if !ViewGroups[mg.Group].NeverGroup}
+							<Tooltip.Root openDelay={1000} disableHoverableContent={true}>
+								<div class="justify-self-end">
+									<Tooltip.Trigger>
+										<i class="ri-list-view"></i>
+										<input type="checkbox" class="!mx-1 w-4 h-4 !my-1 justify-center items-center text-center accent-black shadow-none" id={ViewGroups[mg.Group].Name} value={ViewGroups[mg.Group].Name} bind:group={records.Grouped} />
+									</Tooltip.Trigger>
+									<Tooltip.Content side="bottom">
+										<p class="text-base">Spalten gruppieren</p>
+									</Tooltip.Content>
+								</div>
+							</Tooltip.Root>
+						{/if}
 					</div>
 					{#each Object.entries(mg.Fields) as [n, fg] (n)}
 						{#each fg as f (f.Name)}

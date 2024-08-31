@@ -75,7 +75,7 @@
 				"Type": "Text",
 				"Group": "Transcriptions",
 				"Index": true,
-				"TVisibility": false,
+				"TVisibility": true,
 				"Options": {
 					"Transcription": {
 						"For": "Places"
@@ -93,10 +93,22 @@
 				"Group": "Transcriptions",
 				"Type": "Text",
 				"Index": true,
-				"TVisibility": false,
+				"TVisibility": true,
 				"Options": {
 					"Transcription": {
 						"For": "Agents"
+					}
+				}
+			},
+			{
+				"Name": "Jahresangabe",
+				"Group": "Transcriptions",
+				"Type": "Text",
+				"Index": true,
+				"TVisibility": true,
+				"Options": {
+					"Transcription": {
+						"For": "Date"
 					}
 				}
 			},
@@ -159,7 +171,7 @@
 			{
 				"Name": "Paginierung",
 				"ShortName": "Pag.",
-				"Group": "Transcriptions",
+				"Group": "Extend",
 				"Type": "SelectOne",
 				"TVisibility": false,
 				"Options": {

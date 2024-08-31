@@ -44,7 +44,7 @@
 				"friendlyName": "Aufnahmen",
 				"Type": "BackRelationNM",
 				"Options": {
-					"Table": "__Entries_Agents",
+					"Collection": "__Entries_Agents",
 					"Field": [
 						"Agent"
 					],
@@ -58,7 +58,7 @@
 				"friendlyName": "Werke",
 				"Type": "BackRelationUnlimited",
 				"Options": {
-					"Table": "Works",
+					"Collection": "Works",
 					"Field": [
 						"Creators"
 					]
@@ -86,6 +86,7 @@
 				"Type": "Text",
 				"Group": "Main",
 				"Required": true,
+				"Presentation": "Main",
 				"Presentable": true,
 				"Index": true
 			}
@@ -96,7 +97,7 @@
 				"friendlyName": "Aufnahmen",
 				"Type": "BackRelationUnlimited",
 				"Options": {
-					"Table": "Entries",
+					"Collection": "Entries",
 					"Field": [
 						"Places"
 					],
@@ -142,7 +143,7 @@
 				"Name": "Entries",
 				"friendlyName": "Aufnahmen",
 				"Options": {
-					"Table": "__Entries_Serials",
+					"Collection": "__Entries_Serials",
 					"Field": [
 						"Serial"
 					],
@@ -186,7 +187,7 @@
 				"friendlyName": "Aufnahmen",
 				"Type": "BackRelationUnlimited",
 				"Options": {
-					"Table": "Entries",
+					"Collection": "Entries",
 					"Field": [
 						"Collections"
 					],
@@ -297,7 +298,7 @@
 				"Group": "Entries",
 				"Type": "BackRelationOne",
 				"Options": {
-					"Table": "Entries",
+					"Collection": "Entries",
 					"Field": [
 						"Work"
 					]
@@ -374,6 +375,7 @@
 			{
 				"Name": "Title",
 				"friendlyName": "Titel",
+				"Presentation": "NotMain",
 				"Type": "Text",
 				"Required": true,
 				"Group": "Title"
@@ -384,7 +386,7 @@
 				"friendlynameEN": "Additional Title",
 				"Type": "Text",
 				"Group": "Title",
-				"TVisibility": false
+				"TVisibility": true
 			},
 			{
 				"Name": "Date",
@@ -783,7 +785,7 @@
 				"friendlyName": "Akteure",
 				"Type": "BackRelationNM",
 				"Options": {
-					"Table": "__Entries_Agents",
+					"Collection": "__Entries_Agents",
 					"Field": [
 						"Entry"
 					],
@@ -796,11 +798,11 @@
 				"friendlyName": "Reihen",
 				"Type": "BackRelationNM",
 				"Options": {
-					"Table": "__Entries_Serials",
+					"Collection": "__Entries_Serials",
 					"Field": [
 						"Entry"
 					],
-					"Expand": "__Entries_Reihen_via_Entry.Serial"
+					"Expand": "__Entries_Serials_via_Entry.Serial"
 				},
 				"Group": "Serials"
 			},
@@ -810,7 +812,7 @@
 				"frienlyName": "Untergeordnete Aufnahmen",
 				"Type": "BackRelationOne",
 				"Options": {
-					"Table": "Entries",
+					"Collection": "Entries",
 					"Field": [
 						"ParentEntry"
 					]
@@ -823,7 +825,7 @@
 				"frienlyName": "Beiträge",
 				"Type": "BackRelationOne",
 				"Options": {
-					"Table": "Contents",
+					"Collection": "Contents",
 					"Field": [
 						"Entry"
 					]
@@ -1126,7 +1128,7 @@
 				"Options": {
 					"Collection": "Entries",
 					"MaxSelect": 1,
-					"Expand": "Entry.Work.Creators"
+					"Expand": "Entry.Work"
 				}
 			},
 			{
@@ -1149,12 +1151,14 @@
 				"Name": "Title",
 				"friendlyName": "Titel",
 				"Type": "Text",
+				"Pesentation": "NotMain",
 				"Group": "Title",
 				"Index": true
 			},
 			{
 				"Name": "Incipit",
 				"friendlyName": "Incipit",
+				"Pesentation": "NotMain",
 				"Type": "Text",
 				"Index": true,
 				"Group": "Title"
@@ -1165,7 +1169,7 @@
 				"Name": "Agents",
 				"Type": "BackRelationNM",
 				"Options": {
-					"Table": "__Contents_Agents",
+					"Collection": "__Contents_Agents",
 					"Field": [
 						"Entry"
 					],

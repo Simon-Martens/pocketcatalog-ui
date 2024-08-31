@@ -1,11 +1,6 @@
-import { tables } from '$stores/schema';
+import { tables } from '$stores/tables';
 
 export function match(param: string) {
-	let res = false;
-	if (Object.hasOwn(tables, "Entries")) {
-		res = tables["Entries"].some((t) => t.Name === param);
-	} if (!res && Object.hasOwn(tables, "Contents")) {
-		res = tables["Contents"].some((t) => t.Name === param);
-	}
-	return res;
+	// TODO: we do an extra content table, just with serials; but for now this is enough:
+	return !!(tables.GetTable(param)?.Type === "Entries" || tables.GetTable(param)?.Type === "Contents");
 }

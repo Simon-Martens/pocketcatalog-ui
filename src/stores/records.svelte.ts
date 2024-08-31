@@ -2,9 +2,11 @@ import type { Group, Table, ViewGroup, ViewGroupResult } from "$lib/newtypes";
 import { type RecordModel } from "pocketbase";
 
 import { api } from "./pocketbase";
-import { GetDefaultSort } from "./schema";
+import { tables } from "./tables";
 
 // This is all the Meta Groups, into which fields can be grouped
+// TODO: we can create different meta groups and pass them to the constructor
+// of RecordsList to create different views
 export const ViewGroups: ViewGroup[] = [
     {
         "Name": "Symbol",
@@ -63,7 +65,8 @@ export const ViewGroups: ViewGroup[] = [
 
 
 export class RecordsList {
-    List = $state<null | RecordModel[]>(null)
+    // We use state.raw bc we do not need deep reactivity. We do not modify subitems.
+    List = $state.raw<null | RecordModel[]>(null);
     TotalItems = $state(0);
     TotalPages = $state(0);
 
@@ -135,7 +138,11 @@ export class RecordsList {
             return;
         }
 
-        this.Sort = GetDefaultSort(this.#scheme.Name, this.#scheme.Name);
+        let s = tables.GetPresentationFields(this.#scheme.Name);
+        if (!s) return;
+        this.Sort.push(...s.Main.map((x) => x.Name));
+        if (s.Diff) this.Sort.push(...s.Diff.map((x) => x.Name));
+
     }
 
     DefaultFilter() {
@@ -232,13 +239,13 @@ export class RecordsList {
     }
 
     // TODO: Indirect fetch. (Beiträge over Aufnahmen, Aufnahmen over Sammlung)
-    async Fetch() {
+    async Fetch(fetch = window.fetch) {
         this.Loading = true;
-        return this.#InternalFetch(this.#perpage, this.Page, this.Filter, this.Sort)
+        return this.#InternalFetch(this.#perpage, this.Page, this.Filter, this.Sort, fetch)
             .then(() => this.Loading = false);
     }
 
-    async #InternalFetch(perpage: number, page: number, filter: string, sort: string[]) {
+    async #InternalFetch(perpage: number, page: number, filter: string, sort: string[], fetch = window.fetch) {
         const s = sort.join(",");
         let f = this.#permanentFilter;
 
@@ -259,6 +266,7 @@ export class RecordsList {
                 skipTotal: page !== 1,
                 expand: this.#expand,
                 requestKey: null,
+                fetch: fetch
             })
             .catch((err) => { console.log(err); throw err; })
             .then((res) => {
@@ -275,7 +283,8 @@ export class RecordsList {
                 } else {
                     if (res) {
                         if (this.List) {
-                            this.List.push(...res.items);
+                            // Because we are using state.raw
+                            this.List = [...this.List, ...res.items];
                         } else {
                             this.List = res.items;
                         }
@@ -304,7 +313,7 @@ export class RecordsList {
                     } else if (f.Options.Field)
                         for (const ef of f.Options.Field) {
                             if (exp !== "") exp = exp + ",";
-                            exp = exp + f.Options.Table + "_via_" + ef;
+                            exp = exp + f.Options.Collection + "_via_" + ef;
                         }
                 }
             }

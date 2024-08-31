@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { tables } from '$stores/schema';
+	import { tables } from '$stores/tables';
 	import { page } from '$app/stores';
 	import { loggedIn } from '$stores/pocketbase';
 	import { fly } from 'svelte/transition';
@@ -13,8 +13,8 @@
 
 	const { collections = $bindable() }: Props = $props();
 
-	let entries = Object.hasOwn(tables, 'Entries') ? tables['Entries'] : [];
-	let contents = Object.hasOwn(tables, 'Contents') ? tables['Contents'] : [];
+	let entries = tables.GetTableTypes('Entries');
+	let contents = tables.GetTableTypes('Contents');
 </script>
 
 <div class="flex flex-row gap-y-2 w-full border-b px-8 border-slate-300 bg-slate-100" class:border-b={$loggedIn}>

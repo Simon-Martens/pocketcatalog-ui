@@ -27,6 +27,7 @@ export interface Table {
     DefaultFilter?: string;
     DefaultSort?: string[];
     ListFilter?: string;
+    PresentationFields?: PresentationFields | null;
 }
 
 export interface Schema {
@@ -48,6 +49,7 @@ export interface Schema {
     Default?: string;
     Or?: string;
     Presentation?: Presentation;
+    PresentationFields?: null | PresentationFields;
 }
 export interface Options {
     Transcription?: Transcription;
@@ -60,7 +62,6 @@ export interface Options {
     Protected?: boolean;
     Keys?: string[];
     View?: string;
-    Table: string;
     Field?: string[];
     Expand?: string;
 }
@@ -96,4 +97,13 @@ export interface ViewGroupResult {
     Group: number;
     Fields: ObjectPropertiesOptional<{ [FieldType in Group]: Schema[] }>;
     Grouped?: boolean;
+}
+
+export interface PresentationFields {
+    Table: string;
+    Main: Schema[];
+    Relation?: Schema[];
+    MainSymbol?: Schema[];
+    NotMain?: Schema[];
+    Diff?: Schema[];
 }

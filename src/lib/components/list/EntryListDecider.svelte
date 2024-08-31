@@ -53,7 +53,7 @@
 	<SelectManyItem {M} {T} {F} {G} />
 {:else if F.Type === 'SelectOne'}
 	<SelectOneItem {M} {T} {F} {G} />
-{:else if F.Type.startsWith('Relation')}
+{:else if F.Type.startsWith('Relation') || F.Type === 'BackRelationOne' || F.Type === 'BackRelationUnlimited'}
 	<RelationItem {M} {T} {F} {G} />
 {:else if F.Type.startsWith('BackRelation')}
 	<BackRelationItem {M} {T} {F} {G} />
