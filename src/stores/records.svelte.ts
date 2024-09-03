@@ -53,7 +53,7 @@ export const ViewGroups: ViewGroup[] = [
     {
         "Name": "Other Fields",
         "friendlyName": "Andere Felder",
-        "Groups": ["URL", "File", "Deprecated"],
+        "Groups": ["Items", "URL", "File", "Deprecated"],
         "NeverGroup": true
     },
     {

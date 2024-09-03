@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Schema, Table } from '$lib/newtypes';
 	import type { RecordModel } from 'pocketbase';
+	import { onMount } from 'svelte';
 
 	interface Props {
 		M: RecordModel;
@@ -10,8 +11,26 @@
 	}
 
 	const { M, T, F, G }: Props = $props();
+
+	let divided: boolean = $state.raw(false);
+	let parts: string[] = [];
+
+	onMount(() => {
+		if (F.Options?.Divider) {
+			divided = true;
+			parts = M[F.Name] ? M[F.Name].split(F.Options.Divider) : [];
+		}
+	});
 </script>
 
-<div class="">
-	{M[F.Name]}
-</div>
+{#if !divided}
+	<div class="">
+		{M[F.Name]}
+	</div>
+{:else}
+	{#each parts as part}
+		<div class="">
+			{part}
+		</div>
+	{/each}
+{/if}

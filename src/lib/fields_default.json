@@ -115,7 +115,7 @@
 		"Required": false,
 		"Type": "RelationUnlimited",
 		"Options": {
-			"Collection": "Sammlungen"
+			"Collection": "Collections"
 		}
 	}
 ]

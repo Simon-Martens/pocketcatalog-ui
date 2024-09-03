@@ -89,6 +89,7 @@ class TableManager {
         let msym: Schema[] = [];
         let rela: Schema[] = [];
         let notm: Schema[] = [];
+        let from: { [key: string]: Schema } = {};
         for (const [_, g] of Object.entries(table.Fields)) {
             for (const f of g) {
                 if (f.Presentation)
@@ -97,7 +98,8 @@ class TableManager {
                     } else if (f.Presentation === "Diff") {
                         diff.push(f);
                     } else if (f.Presentation === "FromWhere") {
-                        main.push(f);
+                        if (f.Options?.Collection)
+                            from[f.Options.Collection] = f;
                     } else if (f.Presentation === "MainSymbol") {
                         msym.push(f);
                     } else if (f.Presentation === "Relation") {
@@ -113,6 +115,7 @@ class TableManager {
         if (msym.length) pfields['MainSymbol'] = msym;
         if (rela.length) pfields['Relation'] = rela;
         if (notm.length) pfields['NotMain'] = notm;
+        if (Object.keys(from).length) pfields['FromWhere'] = from;
         return pfields;
     }
 

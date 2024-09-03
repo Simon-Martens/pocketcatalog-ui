@@ -10,7 +10,10 @@
 				"Name": "Nachweis",
 				"Type": "Text",
 				"Index": true,
-				"Group": "Research"
+				"Group": "Research",
+				"Options": {
+					" sfDivider": ";"
+				}
 			},
 			{
 				"Name": "Pseudonyme",
@@ -55,7 +58,10 @@
 			{
 				"Name": "Nachweis",
 				"Type": "Text",
-				"Group": "Research"
+				"Group": "Research",
+				"Opttions": {
+					"Divider": ";"
+				}
 			},
 			{
 				"Name": "Musenalm_ID",
@@ -86,7 +92,10 @@
 				"Name": "Nachweis",
 				"Type": "Text",
 				"Group": "Research",
-				"Index": true
+				"Index": true,
+				"Options": {
+					"Divider": ";"
+				}
 			},
 			{
 				"Name": "Verantwortlichkeitsangabe",

@@ -16,6 +16,7 @@
 	import DateItem from './items/DateItem.svelte';
 	import TagsItem from './items/TagsItem.svelte';
 	import IdentifierItem from './items/IdentifierItem.svelte';
+	import ItemItem from './items/ItemItem.svelte';
 
 	interface Props {
 		M: RecordModel;
@@ -29,10 +30,10 @@
 
 {#if F.Group && F.Group === 'State'}
 	<StateItem {M} {T} {F} {G} />
-{:else if F.Group && F.Group === 'Collections'}
-	<CollectionItem {M} {T} {F} {G} />
 {:else if F.Group && F.Group === 'Tag'}
 	<TagsItem {M} {T} {F} {G} />
+{:else if F.Group && F.Group === 'Collections'}
+	<CollectionItem {M} {T} {F} {G} />
 {:else if F.Group && F.Group === 'Identifier'}
 	<IdentifierItem {M} {T} {F} {G} />
 {:else if F.Group && F.Group === 'Date'}
@@ -41,6 +42,8 @@
 	<SymbolItem {M} {T} {F} {G} />
 {:else if F.Group && F.Group === 'Fields'}
 	<FieldsItem {M} {T} {F} {G} />
+{:else if F.Group && F.Group === 'Items'}
+	<ItemItem {M} {T} {F} {G} />
 {:else if F.Type === 'Text'}
 	<TextItem {M} {T} {F} {G} />
 {:else if F.Type === 'Boolean'}
@@ -53,6 +56,7 @@
 	<SelectManyItem {M} {T} {F} {G} />
 {:else if F.Type === 'SelectOne'}
 	<SelectOneItem {M} {T} {F} {G} />
+	<!-- TODO: Maybe we classify Serials, Agents, Places by group, (just as with Collections or Items) -->
 {:else if F.Type.startsWith('Relation') || F.Type === 'BackRelationOne' || F.Type === 'BackRelationUnlimited'}
 	<RelationItem {M} {T} {F} {G} />
 {:else if F.Type.startsWith('BackRelation')}

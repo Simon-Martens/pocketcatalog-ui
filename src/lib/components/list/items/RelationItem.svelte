@@ -58,6 +58,4 @@
 	{:else}
 		{@render entry(data)}
 	{/if}
-	{:else if !data}
-	<div class="text-muted-foreground text-center">N/A</div>
 {/if}

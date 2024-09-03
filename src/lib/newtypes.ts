@@ -64,7 +64,9 @@ export interface Options {
     View?: string;
     Field?: string[];
     Expand?: string;
+    Divider?: string;
 }
+
 export interface Transcription {
     For: string;
 }
@@ -106,4 +108,5 @@ export interface PresentationFields {
     MainSymbol?: Schema[];
     NotMain?: Schema[];
     Diff?: Schema[];
+    FromWhere?: { [key: string]: Schema };
 }
